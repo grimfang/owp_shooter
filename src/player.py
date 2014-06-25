@@ -5,6 +5,7 @@ class Player(DirectObject):
     def __init__(self):
         self.name = ""
         self.points = 0
+        self.runSpeed = 1.8
         self.keyMap = {
             "left":False,
             "right":False,
@@ -59,12 +60,12 @@ class Player(DirectObject):
     def move(self, task):
         elapsed = globalClock.getDt()
         if self.keyMap["up"]:
-            self.model.setY(self.model.getY() + elapsed)
+            self.model.setY(self.model.getY() + elapsed * self.runSpeed)
         elif self.keyMap["down"]:
-            self.model.setY(self.model.getY() - elapsed)
+            self.model.setY(self.model.getY() - elapsed * self.runSpeed)
 
         if self.keyMap["left"]:
-            self.model.setX(self.model.getX() - elapsed)
+            self.model.setX(self.model.getX() - elapsed * self.runSpeed)
         elif self.keyMap["right"]:
-            self.model.setX(self.model.getX() + elapsed)
+            self.model.setX(self.model.getX() + elapsed * self.runSpeed)
         return task.cont
