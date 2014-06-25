@@ -16,7 +16,7 @@ class Enemy():
 
     def stop(self):
         taskMgr.remove("moveTask")
-        self.model.remove()
+        self.model.remove_node()
 
     def move(self, task):
         elapsed = globalClock.getDt()

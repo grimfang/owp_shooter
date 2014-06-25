@@ -15,5 +15,5 @@ class Level():
         self.model.reparentTo(render)
 
     def stop(self):
-        self.model.remove()
+        self.model.remove_node()
 
