@@ -39,13 +39,13 @@ class Main(ShowBase, DirectObject):
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
-        self.mouse = Mouse(self)
+        self.mouse = Mouse(self.level.planeNP)
         random.seed()
 
         # Create Traverser and eventHandler
-        self.traverser = CollisionTraverser('Main Trav')
-        base.cTrav = self.traverser
-        self.eventHandler = CollisionHandlerQueue()#CollisionHandlerEvent()
+        cTrav = CollisionTraverser('Main Trav')
+        base.cTrav = cTrav
+        #self.eventHandler = CollisionHandlerQueue()#CollisionHandlerEvent()
         #elf.eventHandler.addInPattern('into-%in')
         #self.eventHandler.addOutPattern('outof-%in')
 
@@ -63,7 +63,6 @@ class Main(ShowBase, DirectObject):
         self.accept("Highscore_back", self.mainMenu.show)
 
     def start(self):
-        #TODO: start the main loop for spawning enemies and items.
         self.level.start()
         self.player.start(self.level.startPos, self.mainMenu.getPlayername())
         self.taskMgr.add(self.world, "MAIN TASK")
@@ -128,7 +127,8 @@ class Main(ShowBase, DirectObject):
         return task.cont
 
     def addToTrav(self, _object):
-        base.cTrav.addCollider(_object, self.eventHandler)
+        pass
+        #base.cTrav.addCollider(_object, self.eventHandler)
 
 APP = Main()
 APP.run()
