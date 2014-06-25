@@ -1,4 +1,5 @@
 from direct.showbase.DirectObject import DirectObject
+from hud import Hud
 
 class Player(DirectObject):
     def __init__(self):
@@ -12,6 +13,7 @@ class Player(DirectObject):
         self.model = loader.loadModel("Player")
         self.model.setP(-90)
         base.camera.reparentTo(self.model)
+        self.playerHud = Hud()
 
     def acceptKeys(self):
         self.accept("w", self.setKey, ["up", True])
@@ -39,10 +41,12 @@ class Player(DirectObject):
                           startPos.y,
                           0)
         self.acceptKeys()
+        self.playerHud.show()
 
     def stop(self):
         taskMgr.remove("moveTask")
         self.ignoreKeys()
+        self.playerHud.hide()
 
     def move(self, task):
         elapsed = globalClock.getDt()
