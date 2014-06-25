@@ -16,7 +16,7 @@ from direct.showbase.DirectObject import DirectObject
 
 from panda3d.core import VBase2
 from panda3d.core import Vec4
-from panda3d.core import CollisionTraverser, CollisionHandlerEvent
+from panda3d.core import CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
 
 from player import Player
 from enemy import Enemy
@@ -25,6 +25,7 @@ from items import Heal, Weapon
 from mainScreen import MainScreen
 from highscore import Highscore
 from weapon import Weapon
+from mouse import Mouse
 import random
 
 class Main(ShowBase, DirectObject):
@@ -38,12 +39,23 @@ class Main(ShowBase, DirectObject):
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
+        self.mouse = Mouse(self)
         random.seed()
 
+        # Create Traverser and eventHandler
+        self.traverser = CollisionTraverser('Main Trav')
+        base.cTrav = self.traverser
+        self.eventHandler = CollisionHandlerQueue()#CollisionHandlerEvent()
+        #elf.eventHandler.addInPattern('into-%in')
+        #self.eventHandler.addOutPattern('outof-%in')
+
+        # Setup Gui
         self.mainMenu = MainScreen()
         self.mainMenu.show()
         self.highscore = Highscore()
 
+
+        # Menu events
         self.accept("escape", self.quit)
         self.accept("MainMenu_start", self.start)
         self.accept("Highscore_show", self.highscore.show)
@@ -114,6 +126,9 @@ class Main(ShowBase, DirectObject):
         """MAIN TASK"""
         self.spawnEnemy()
         return task.cont
+
+    def addToTrav(self, _object):
+        base.cTrav.addCollider(_object, self.eventHandler)
 
 APP = Main()
 APP.run()

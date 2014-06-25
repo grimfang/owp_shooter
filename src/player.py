@@ -86,5 +86,6 @@ class Player(DirectObject):
     def fireActiveWeapon(self):
 
         if self.activeWeapon:
+            self.main.mouse.getMousePos()
             self.activeWeapon.doFire()
 

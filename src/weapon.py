@@ -1,5 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
-from panda3d.core import CollisionNode, CollisionRay
+from panda3d.core import CollisionNode, CollisionSegment
+from panda3d.core import BitMask32
 from hud import Hud
 
 class Weapon(DirectObject):
@@ -14,6 +15,8 @@ class Weapon(DirectObject):
 
         # Collision Stuff
         self.wepRay = None
+        # Make weapon ray
+        self.setupRay()
 
     def setupModel(self):
         pass
@@ -27,6 +30,8 @@ class Weapon(DirectObject):
         self.wepRay.addSolid(self.cRay)
         self.wepRay.setFromCollideMask(BitMask32.bit(8))
         self.wepRay.setIntoCollideMask(BitMask32.allOff())
+        self.shooterNP = render.attachNewNode(self.wepRay)
+        self.main.addToTrav(self.shooterNP)
 
         #self.wepRay.setOrigin(self.player.model.getPos())
         #self.wepRay.setDirection(0, 1, 0)
@@ -36,8 +41,8 @@ class Weapon(DirectObject):
         self.isFiring = True
 
         # No idea how the fk this works...
-        #self.wepRay.setPointA(self.main.player.model.getPos())
-        #self.wepRay.setPointB(0, 0, 0) # _toPos Should be the mouse clicked pos
+        self.cRay.setPointA(self.main.player.model.getPos())
+        self.cRay.setPointB(0, 5, 0) # _toPos Should be the mouse clicked pos
 
     def stopFire(self):
         pass
