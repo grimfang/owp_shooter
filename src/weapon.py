@@ -1,38 +1,46 @@
 from direct.showbase.DirectObject import DirectObject
+from panda3d.core import CollisionNode, CollisionRay
 from hud import Hud
 
 class Weapon(DirectObject):
-    def __init__(self):
-        self.name = ""
+    def __init__(self, _main, _name, _fireRate, _mountSlot=0):
+        self.main = _main
+        self.name = _name
+        self.fireRate = _fireRate
+        self.mountSlot = _mountSlot
 
-    def acceptKeys(self):
-        self.accept("w", self.setKey, ["up", True])
-        self.accept("w-up", self.setKey, ["up", False])
+        # Control
+        self.isFiring = False
 
-    def ignoreKeys(self):
-        self.ignore("w")
+        # Collision Stuff
+        self.wepRay = None
 
-    def setKey(self, action, pressed):
-        self.keyMap[action] = pressed
+    def setupModel(self):
+        pass
 
-    def start(self, startPos, playerName):
-        self.name = playerName
-        self.points = 0
-        self.model.show()
-        self.model.reparentTo(render)
-        taskMgr.add(self.move, "moveTask")
-        self.model.setPos(startPos.x,
-                          startPos.y,
-                          0)
-        self.acceptKeys()
-        self.playerHud.show()
+    def setAmmo(self):
+        pass
 
-    def stop(self):
-        taskMgr.remove("moveTask")
-        self.ignoreKeys()
-        self.playerHud.hide()
-        self.model.hide()
+    def setupRay(self):
+        self.wepRay = CollisionNode("WeaponRay")
+        self.cRay = CollisionSegment()
+        self.wepRay.addSolid(self.cRay)
+        self.wepRay.setFromCollideMask(BitMask32.bit(8))
+        self.wepRay.setIntoCollideMask(BitMask32.allOff())
 
-    def move(self, task):
-        elapsed = globalClock.getDt()
-        return task.cont
+        #self.wepRay.setOrigin(self.player.model.getPos())
+        #self.wepRay.setDirection(0, 1, 0)
+
+    def doFire(self, _toPos=(0, 0, 0)):
+        print "Weapon - Fire!!"
+        self.isFiring = True
+
+        # No idea how the fk this works...
+        #self.wepRay.setPointA(self.main.player.model.getPos())
+        #self.wepRay.setPointB(0, 0, 0) # _toPos Should be the mouse clicked pos
+
+    def stopFire(self):
+        pass
+
+    def reload(self):
+        pass

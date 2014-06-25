@@ -2,7 +2,8 @@ from direct.showbase.DirectObject import DirectObject
 from hud import Hud
 
 class Player(DirectObject):
-    def __init__(self):
+    def __init__(self, _main):
+        self.main = _main
         self.name = ""
         self.points = 0
         self.runSpeed = 1.8
@@ -20,6 +21,10 @@ class Player(DirectObject):
         self.playerHud.hide()
         self.model.hide()
 
+        # Weapons: size=2, 0=main, 1=offhand
+        self.mountSlot = []
+        self.activeWeapon = None
+
     def acceptKeys(self):
         self.accept("w", self.setKey, ["up", True])
         self.accept("w-up", self.setKey, ["up", False])
@@ -30,11 +35,16 @@ class Player(DirectObject):
         self.accept("d", self.setKey, ["right", True])
         self.accept("d-up", self.setKey, ["right", False])
 
+        # Add mouse btn for fire()
+        self.accept("mouse1", self.fireActiveWeapon)
+
     def ignoreKeys(self):
         self.ignore("w")
         self.ignore("a")
         self.ignore("s")
         self.ignore("d")
+
+        # Add mouse btn for fire to ignore
 
     def setKey(self, action, pressed):
         self.keyMap[action] = pressed
@@ -69,3 +79,12 @@ class Player(DirectObject):
         elif self.keyMap["right"]:
             self.model.setX(self.model.getX() + elapsed * self.runSpeed)
         return task.cont
+
+    def mountWeapon(self, _weaponToMount):
+        self.activeWeapon = _weaponToMount # self.mountSlot[0]
+
+    def fireActiveWeapon(self):
+
+        if self.activeWeapon:
+            self.activeWeapon.doFire()
+

@@ -16,6 +16,7 @@ from direct.showbase.DirectObject import DirectObject
 
 from panda3d.core import VBase2
 from panda3d.core import Vec4
+from panda3d.core import CollisionTraverser, CollisionHandlerEvent
 
 from player import Player
 from enemy import Enemy
@@ -23,6 +24,7 @@ from level import Level
 from items import Heal, Weapon
 from mainScreen import MainScreen
 from highscore import Highscore
+from weapon import Weapon
 import random
 
 class Main(ShowBase, DirectObject):
@@ -30,7 +32,7 @@ class Main(ShowBase, DirectObject):
         ShowBase.__init__(self)
         self.win.setClearColor(Vec4(0.12,0.43,0.18,1))
         self.disableMouse()
-        self.player = Player()
+        self.player = Player(self)
         self.enemyList = []
         self.maxEnemyCount = 15
         self.itemList = []
@@ -54,6 +56,11 @@ class Main(ShowBase, DirectObject):
         self.player.start(self.level.startPos, self.mainMenu.getPlayername())
         self.taskMgr.add(self.world, "MAIN TASK")
         self.accept("escape", self.stop)
+
+        # Create a basic weapon
+        self.player.mountSlot.append(Weapon(self, "rayGun", 4))
+        # Also mount the weapon on the player
+        self.player.mountWeapon(self.player.mountSlot[0])
 
     def stop(self):
         self.level.stop()
