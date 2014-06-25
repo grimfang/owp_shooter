@@ -15,10 +15,12 @@ class Player(DirectObject):
             "up":False,
             "down":False
             }
-        base.camera.setPos(0,-20,0)
+        base.camera.setPos(0,0,0)
         self.model = loader.loadModel("Player")
-        self.model.setP(-90)
-        base.camera.reparentTo(self.model)
+        #self.model.setP(-90)
+        base.camera.setP(-90)
+        #base.camera.setP(90)
+        #base.camera.reparentTo(self.model)
         self.playerHud = Hud()
         self.playerHud.hide()
         self.model.hide()
@@ -71,17 +73,35 @@ class Player(DirectObject):
 
     def move(self, task):
         elapsed = globalClock.getDt()
+
+        # set headding
+        pos = self.main.mouse.getMousePos()
+        pos.setZ(0)
+        self.model.lookAt(pos)
+        self.model.setP(-90)
+
+        # new player position
         if self.keyMap["up"]:
+            # follow mouse mode
+            #self.model.setZ(self.model, 5 * elapsed * self.runSpeed)
+            # axis move mode
             self.model.setY(self.model.getY() + elapsed * self.runSpeed)
         elif self.keyMap["down"]:
+            #self.model.setZ(self.model, -5 * elapsed * self.runSpeed)
             self.model.setY(self.model.getY() - elapsed * self.runSpeed)
 
         if self.keyMap["left"]:
+            # follow mouse mode
+            #self.model.setX(self.model, -5 * elapsed * self.runSpeed)
+            # axis move mode
             self.model.setX(self.model.getX() - elapsed * self.runSpeed)
         elif self.keyMap["right"]:
+            #self.model.setX(self.model, 5 * elapsed * self.runSpeed)
             self.model.setX(self.model.getX() + elapsed * self.runSpeed)
 
-        #self.model.lookAt(self.main.mouse.getMousePos())
+        # actualize cam position
+        base.camera.setPos(self.model.getPos())
+        base.camera.setZ(20)
         return task.cont
 
     def mountWeapon(self, _weaponToMount):
