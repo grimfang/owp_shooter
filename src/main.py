@@ -38,7 +38,7 @@ class Main(ShowBase, DirectObject):
         self.accept("escape", self.stop)
 
     def start(self):
-        #TODO: start the main loop for spawning enemies and items
+        #TODO: start the main loop for spawning enemies and items...
         self.level.start()
         self.player.start(self.level.startPos)
         self.taskMgr.add(self.world, "MAIN TASK")
