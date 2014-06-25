@@ -3,6 +3,8 @@ from hud import Hud
 
 class Player(DirectObject):
     def __init__(self):
+        self.name = ""
+        self.points = 0
         self.keyMap = {
             "left":False,
             "right":False,
@@ -14,6 +16,8 @@ class Player(DirectObject):
         self.model.setP(-90)
         base.camera.reparentTo(self.model)
         self.playerHud = Hud()
+        self.playerHud.hide()
+        self.model.hide()
 
     def acceptKeys(self):
         self.accept("w", self.setKey, ["up", True])
@@ -34,7 +38,10 @@ class Player(DirectObject):
     def setKey(self, action, pressed):
         self.keyMap[action] = pressed
 
-    def start(self, startPos):
+    def start(self, startPos, playerName):
+        self.name = playerName
+        self.points = 0
+        self.model.show()
         self.model.reparentTo(render)
         taskMgr.add(self.move, "moveTask")
         self.model.setPos(startPos.x,
@@ -47,6 +54,7 @@ class Player(DirectObject):
         taskMgr.remove("moveTask")
         self.ignoreKeys()
         self.playerHud.hide()
+        self.model.hide()
 
     def move(self, task):
         elapsed = globalClock.getDt()

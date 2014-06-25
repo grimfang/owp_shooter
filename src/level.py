@@ -10,5 +10,5 @@ class Level():
         self.model.reparentTo(render)
 
     def stop(self):
-        pass
+        self.model.remove()
 

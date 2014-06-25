@@ -20,6 +20,8 @@ from player import Player
 from enemy import Enemy
 from level import Level
 from items import Heal, Weapon
+from mainScreen import MainScreen
+from highscore import Highscore
 import random
 
 class Main(ShowBase, DirectObject):
@@ -35,17 +37,31 @@ class Main(ShowBase, DirectObject):
         self.level = Level()
         random.seed()
 
-        self.accept("escape", self.stop)
+        self.mainMenu = MainScreen()
+        self.mainMenu.show()
+        self.highscore = Highscore()
+
+        self.accept("escape", self.quit)
+        self.accept("MainMenu_start", self.start)
+        self.accept("Highscore_show", self.highscore.show)
+        self.accept("MainMenu_quit", self.quit)
+        self.accept("Highscore_back", self.mainMenu.show)
 
     def start(self):
         #TODO: start the main loop for spawning enemies and items
         self.level.start()
-        self.player.start(self.level.startPos)
+        self.player.start(self.level.startPos, self.mainMenu.getPlayername())
         self.taskMgr.add(self.world, "MAIN TASK")
+        self.accept("escape", self.stop)
 
     def stop(self):
-        self.player.stop()
         self.level.stop()
+        self.highscore.setPoints(self.player.name, self.player.points)
+        self.player.stop()
+        self.taskMgr.remove("MAIN TASK")
+        self.mainMenu.show()
+
+    def quit(self):
         if self.appRunner:
             self.appRunner.stop()
         else:
@@ -78,5 +94,4 @@ class Main(ShowBase, DirectObject):
         return task.cont
 
 APP = Main()
-APP.start()
 APP.run()
