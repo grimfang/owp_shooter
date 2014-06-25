@@ -1,6 +1,8 @@
 from direct.showbase.DirectObject import DirectObject
 from hud import Hud
 
+import math
+
 class Player(DirectObject):
     def __init__(self, _main):
         self.main = _main
@@ -78,6 +80,8 @@ class Player(DirectObject):
             self.model.setX(self.model.getX() - elapsed * self.runSpeed)
         elif self.keyMap["right"]:
             self.model.setX(self.model.getX() + elapsed * self.runSpeed)
+
+        #self.model.lookAt(self.main.mouse.getMousePos())
         return task.cont
 
     def mountWeapon(self, _weaponToMount):
@@ -86,6 +90,6 @@ class Player(DirectObject):
     def fireActiveWeapon(self):
 
         if self.activeWeapon:
-            self.main.mouse.getMousePos()
-            self.activeWeapon.doFire()
+            mpos = self.main.mouse.getMousePos()
+            self.activeWeapon.doFire(mpos)
 

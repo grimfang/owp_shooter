@@ -1,6 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
 from panda3d.core import CollisionNode, CollisionSegment
-from panda3d.core import BitMask32
+from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerQueue
 from hud import Hud
 
 class Weapon(DirectObject):
@@ -25,13 +25,21 @@ class Weapon(DirectObject):
         pass
 
     def setupRay(self):
-        self.wepRay = CollisionNode("WeaponRay")
-        self.cRay = CollisionSegment()
-        self.wepRay.addSolid(self.cRay)
-        self.wepRay.setFromCollideMask(BitMask32.bit(8))
-        self.wepRay.setIntoCollideMask(BitMask32.allOff())
-        self.shooterNP = render.attachNewNode(self.wepRay)
-        self.main.addToTrav(self.shooterNP)
+        self.picker = CollisionTraverser()
+        # Setup mouse ray
+        self.pq = CollisionHandlerQueue()
+        # Create a collision Node
+        pickerNode = CollisionNode('WeaponRay')
+        # set the nodes collision bitmask
+        pickerNode.setFromCollideMask(BitMask32.bit(1))#GeomNode.getDefaultCollideMask())
+        # create a collision ray
+        self.pickerRay = CollisionSegment()
+        # add the ray as a solid to the picker node
+        pickerNode.addSolid(self.pickerRay)
+        # create a nodepath with the camera to the picker node
+        self.pickerNP = self.main.player.model.attachNewNode(pickerNode)
+        # add the nodepath to the base traverser
+        self.picker.addCollider(self.pickerNP, self.pq)
 
         #self.wepRay.setOrigin(self.player.model.getPos())
         #self.wepRay.setDirection(0, 1, 0)
@@ -41,8 +49,9 @@ class Weapon(DirectObject):
         self.isFiring = True
 
         # No idea how the fk this works...
-        self.cRay.setPointA(self.main.player.model.getPos())
-        self.cRay.setPointB(0, 5, 0) # _toPos Should be the mouse clicked pos
+        self.pickerRay.setPointA(self.main.player.model.getPos())
+        self.pickerRay.setPointB(_toPos) # _toPos Should be the mouse clicked pos
+
 
     def stopFire(self):
         pass
