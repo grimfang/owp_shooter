@@ -44,12 +44,12 @@ class Player(DirectObject):
         self.points = 0
         self.model.show()
         self.model.reparentTo(render)
-        taskMgr.add(self.move, "moveTask")
         self.model.setPos(startPos.x,
                           startPos.y,
                           0)
         self.acceptKeys()
         self.playerHud.show()
+        taskMgr.add(self.move, "moveTask")
 
     def stop(self):
         taskMgr.remove("moveTask")

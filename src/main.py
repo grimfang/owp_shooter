@@ -14,6 +14,7 @@ loadPrcFileData("",
 from direct.showbase.ShowBase import ShowBase
 from direct.showbase.DirectObject import DirectObject
 
+from panda3d.core import VBase2
 from panda3d.core import Vec4
 
 from player import Player
@@ -58,6 +59,11 @@ class Main(ShowBase, DirectObject):
         self.level.stop()
         self.highscore.setPoints(self.player.name, self.player.points)
         self.player.stop()
+        tempIDList = []
+        for enemy in self.enemyList:
+            tempIDList.append(enemy.id)
+        for enemyID in tempIDList:
+            self.removeEnemy(enemyID)
         self.taskMgr.remove("MAIN TASK")
         self.mainMenu.show()
 
@@ -70,14 +76,22 @@ class Main(ShowBase, DirectObject):
     def spawnEnemy(self):
         if len(self.enemyList) > self.maxEnemyCount: return False
         enemy = Enemy()
-        #TODO: set enemy position, ID and other necessary things
+        x = 0.0
+        y = 0.0
+        while (x > self.player.model.getX() - 1.0 and x < self.player.model.getX() + 1.0):
+            x = random.uniform(-9, 9)
+        while (y > self.player.model.getY() - 1.0 and y < self.player.model.getY() + 1.0):
+            y = random.uniform(-9, 9)
+        position = VBase2(x, y)
+
+        enemy.start(position)
         self.enemyList.append(enemy)
         return True
 
     def removeEnemy(self, enemyID):
         for enemy in self.enemyList:
             if enemy.id == enemyID:
-                # TODO: Check if that really works
+                enemy.stop()
                 self.enemyList.remove(enemy)
                 return True
         return False
@@ -91,6 +105,7 @@ class Main(ShowBase, DirectObject):
 
     def world(self, task):
         """MAIN TASK"""
+        self.spawnEnemy()
         return task.cont
 
 APP = Main()
