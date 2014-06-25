@@ -48,7 +48,7 @@ class Main(ShowBase, DirectObject):
         self.accept("Highscore_back", self.mainMenu.show)
 
     def start(self):
-        #TODO: start the main loop for spawning enemies and items
+        #TODO: start the main loop for spawning enemies and items.
         self.level.start()
         self.player.start(self.level.startPos, self.mainMenu.getPlayername())
         self.taskMgr.add(self.world, "MAIN TASK")
