@@ -1,8 +1,5 @@
-<Comment> {
-  "egg-texture-cards -o Player.egg -p 100,100 ./Player.png"
-}
-<Texture> Player {
-  "./PlayerHoldMG.png"
+<Texture> Item {
+  "./ItemMG.png"
 }
 <Group> {
   <VertexPool> vpool {
@@ -23,10 +20,10 @@
       <UV> { 1 1 }
     }
   }
-  <Group> Player {
+  <Group> Item {
     <Polygon> {
       <RGBA> { 1 1 1 1 }
-      <TRef> { Player }
+      <TRef> { Item }
       <VertexRef> { 0 1 2 3 <Ref> { vpool } }
     }
   }

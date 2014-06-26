@@ -45,13 +45,6 @@ class Main(ShowBase, DirectObject):
 
         self.gameStarted = False
 
-        # Create Traverser and eventHandler
-        cTrav = CollisionTraverser('Main Trav')
-        base.cTrav = cTrav
-        #self.eventHandler = CollisionHandlerQueue()#CollisionHandlerEvent()
-        #elf.eventHandler.addInPattern('into-%in')
-        #self.eventHandler.addOutPattern('outof-%in')
-
         # Setup Gui
         self.mainMenu = MainScreen()
         self.mainMenu.show()
@@ -129,13 +122,24 @@ class Main(ShowBase, DirectObject):
     def spawnItem(self):
         if len(self.itemList) > self.maxItemCount: return False
         item = random.choice([Heal(), MachineGun()])
-        #TODO: set item position, ID and other necessary things
+
+        x = self.player.model.getX()
+        y = self.player.model.getY()
+        while (x > self.player.model.getX() - 4.5 and x < self.player.model.getX() + 4.5):
+            x = random.uniform(-9, 9)
+        while (y > self.player.model.getY() - 4.5 and y < self.player.model.getY() + 4.5):
+            y = random.uniform(-9, 9)
+        position = VBase2(x, y)
+
+        item.start(position)
+
         self.itemList.append(item)
         return True
 
     def world(self, task):
         """MAIN TASK"""
         self.spawnEnemy()
+        self.spawnItem()
         return task.cont
 
     def AIUpdate(self, task):
@@ -147,10 +151,6 @@ class Main(ShowBase, DirectObject):
                 enemy.model.setP(-90)
                 enemy.model.setH(enemy.model.getH() + 180)
         return task.cont
-
-    def addToTrav(self, _object):
-        pass
-        #base.cTrav.addCollider(_object, self.eventHandler)
 
 APP = Main()
 APP.run()

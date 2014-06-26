@@ -1,3 +1,5 @@
+from panda3d.core import CollisionSphere, CollisionNode
+from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent
 from direct.showbase.DirectObject import DirectObject
 from hud import Hud
 
@@ -16,7 +18,9 @@ class Player(DirectObject):
             "down":False
             }
         base.camera.setPos(0,0,0)
-        self.model = loader.loadModel("PlayerHoldPistol")
+        self.model = loader.loadModel("Player")
+        self.model.find('**/+SequenceNode').node().stop()
+        self.model.find('**/+SequenceNode').node().pose(0)
         base.camera.setP(-90)
         self.playerHud = Hud()
         self.playerHud.hide()
@@ -25,6 +29,18 @@ class Player(DirectObject):
         # Weapons: size=2, 0=main, 1=offhand
         self.mountSlot = []
         self.activeWeapon = None
+
+        self.playerTraverser = CollisionTraverser()
+        self.playerEH = CollisionHandlerEvent()
+        self.playerEH.addInPattern('into-%in')
+        self.playerEH.addInPattern('colIn-%fn')
+        playerCNode = CollisionNode('playerSphere')
+        playerCNode.setFromCollideMask(BitMask32.bit(1))
+        self.playerSphere = CollisionSphere(0, 0, 0, 1)
+        playerCNode.addSolid(self.playerSphere)
+        self.playerNP = self.model.attachNewNode(playerCNode)
+        self.playerTraverser.addCollider(self.playerNP, self.playerEH)
+        #self.playerNP.show()
 
     def acceptKeys(self):
         self.accept("w", self.setKey, ["up", True])
@@ -111,14 +127,13 @@ class Player(DirectObject):
 
     def mountWeapon(self, _weaponToMount):
         self.activeWeapon = _weaponToMount # self.mountSlot[0]
-        self.model.remove_node()
         if self.activeWeapon.style == "TwoHand":
-            self.model = loader.loadModel("PlayerHoldMG")
+            self.model.find('**/+SequenceNode').node().pose(0)
         else:
-            self.model = loader.loadModel("PlayerHoldPistol")
+            self.model.find('**/+SequenceNode').node().pose(1)
         self.activeWeapon.model.reparentTo(self.model)
         self.activeWeapon.model.setY(self.model.getY() - 0.1)
-        self.model.reparentTo(render)
+        self.model.show()
 
     def fireActiveWeapon(self):
         if self.activeWeapon:
