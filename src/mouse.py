@@ -44,7 +44,6 @@ class Mouse(DirectObject):
                 self.pq.sortEntries()
                 # This is the point at where the mouse ray and the level plane intersect
                 hitPos = self.pq.getEntry(0).getSurfacePoint(render)
-                print hitPos
                 return hitPos
         return Point3(0, 0, 0)
 

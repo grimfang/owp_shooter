@@ -40,6 +40,7 @@ class Weapon(DirectObject):
         self.pickerNP = self.main.player.model.attachNewNode(pickerNode)
         # add the nodepath to the base traverser
         self.picker.addCollider(self.pickerNP, self.pq)
+        self.pickerNP.show()
 
         #self.wepRay.setOrigin(self.player.model.getPos())
         #self.wepRay.setDirection(0, 1, 0)
@@ -51,6 +52,18 @@ class Weapon(DirectObject):
         # No idea how the fk this works...
         self.pickerRay.setPointA(self.main.player.model.getPos())
         self.pickerRay.setPointB(_toPos) # _toPos Should be the mouse clicked pos
+
+        for i in self.main.enemyList:
+
+            self.picker.traverse(i.colNP)
+
+            if self.pq.getNumEntries() > 0:
+                # sort the entries to get the closest first
+                self.pq.sortEntries()
+                # This is the point at where the mouse ray and the level plane intersect
+                hitPos = self.pq.getEntry(0).getSurfacePoint(render)
+                print "WEAPON: ", hitPos
+                
 
 
     def stopFire(self):

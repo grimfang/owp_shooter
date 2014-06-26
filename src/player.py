@@ -112,4 +112,5 @@ class Player(DirectObject):
         if self.activeWeapon:
             mpos = self.main.mouse.getMousePos()
             self.activeWeapon.doFire(mpos)
+            print "heee"
 

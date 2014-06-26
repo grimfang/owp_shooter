@@ -1,3 +1,5 @@
+from panda3d.core import CollisionSphere, CollisionNode
+
 class Enemy():
     def __init__(self):
         self.id = id(self)
@@ -12,7 +14,16 @@ class Enemy():
         self.model.setPos(startPos.x,
                           startPos.y,
                           0)
+
+        self.buildCollisionBodies(self.model)
         taskMgr.add(self.move, "moveTask")
+
+    def buildCollisionBodies(self, _model):
+        cs = CollisionSphere(0, 0, 0, 1)
+        self.colNP = _model.attachNewNode(CollisionNode('cnode'))
+        self.colNP.node().addSolid(cs)
+        self.colNP.show()
+        return self.colNP
 
     def stop(self):
         taskMgr.remove("moveTask")
