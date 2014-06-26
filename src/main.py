@@ -17,6 +17,7 @@ from direct.showbase.DirectObject import DirectObject
 from panda3d.core import VBase2
 from panda3d.core import Vec4
 from panda3d.core import CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
+from panda3d.ai import *
 
 from player import Player
 from enemy import Enemy
@@ -35,12 +36,15 @@ class Main(ShowBase, DirectObject):
         self.disableMouse()
         self.player = Player(self)
         self.enemyList = []
-        self.maxEnemyCount = 15
+        self.maxEnemyCount = 0
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
         self.mouse = Mouse(self.level.planeNP)
         random.seed()
+
+        self.gameStarted = False
+        self.count = 0
 
         # Create Traverser and eventHandler
         cTrav = CollisionTraverser('Main Trav')
@@ -63,15 +67,20 @@ class Main(ShowBase, DirectObject):
         self.accept("Highscore_back", self.mainMenu.show)
 
     def start(self):
+        self.gameStarted = True
         self.level.start()
         self.player.start(self.level.startPos, self.mainMenu.getPlayername())
         self.taskMgr.add(self.world, "MAIN TASK")
         self.accept("escape", self.stop)
+        self.AiWorld = AIWorld(render)
+        self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
         # Create a basic weapon
         self.player.mountSlot.append(Weapon(self, "rayGun", 4))
         # Also mount the weapon on the player
         self.player.mountWeapon(self.player.mountSlot[0])
+
+        
 
     def stop(self):
         self.level.stop()
@@ -94,6 +103,7 @@ class Main(ShowBase, DirectObject):
     def spawnEnemy(self):
         if len(self.enemyList) > self.maxEnemyCount: return False
         enemy = Enemy()
+
         x = 0.0
         y = 0.0
         while (x > self.player.model.getX() - 1.0 and x < self.player.model.getX() + 1.0):
@@ -103,8 +113,20 @@ class Main(ShowBase, DirectObject):
         position = VBase2(x, y)
 
         enemy.start(position)
+        self.makeAi(enemy)
         self.enemyList.append(enemy)
+        self.count += 1
+
         return True
+
+    def makeAi(self, _ai):
+        
+        # Make some ai character for each
+        self.aiChar = AICharacter("Enemy" + str(self.count), _ai.model, 100, 0.05, 0.5)
+        self.AiWorld.addAiChar(self.aiChar)
+        self.AIbehaviors = self.aiChar.getAiBehaviors()
+
+        self.AIbehaviors.pursue(self.player.model)     
 
     def removeEnemy(self, enemyID):
         for enemy in self.enemyList:
@@ -124,6 +146,11 @@ class Main(ShowBase, DirectObject):
     def world(self, task):
         """MAIN TASK"""
         self.spawnEnemy()
+        return task.cont
+
+    def AIUpdate(self, task):
+        
+        self.AiWorld.update()
         return task.cont
 
     def addToTrav(self, _object):

@@ -4,7 +4,7 @@ class Enemy():
     def __init__(self):
         self.id = id(self)
         self.model = loader.loadModel("Enemy")
-        self.model.setP(-90)
+        self.model.setP(-180)
         self.model.hide()
 
 
