@@ -22,7 +22,7 @@ from panda3d.ai import *
 from player import Player
 from enemy import Enemy
 from level import Level
-from items import Heal, Weapon
+from items import Heal, MachineGun
 from mainScreen import MainScreen
 from highscore import Highscore
 from weapon import Weapon
@@ -77,13 +77,12 @@ class Main(ShowBase, DirectObject):
         self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
         # Create a basic weapon
-        self.player.mountSlot.append(Weapon(self, "rayGun", 4))
+        self.player.mountSlot.append(Weapon(self, "rayGun", 4, weaponType="MG"))
         # Also mount the weapon on the player
         self.player.mountWeapon(self.player.mountSlot[0])
 
     def stop(self):
         self.level.stop()
-        print "player points:", self.player.points
         self.highscore.setPoints(self.player.name, self.player.points)
         self.player.stop()
         tempIDList = []
@@ -93,6 +92,7 @@ class Main(ShowBase, DirectObject):
             self.removeEnemy(enemyID)
         self.taskMgr.remove("MAIN TASK")
         self.mainMenu.show()
+        self.accept("escape", self.quit)
 
     def quit(self):
         if self.appRunner:
@@ -104,11 +104,11 @@ class Main(ShowBase, DirectObject):
         if len(self.enemyList) > self.maxEnemyCount: return False
         enemy = Enemy(self)
 
-        x = 0.0
-        y = 0.0
-        while (x > self.player.model.getX() - 1.0 and x < self.player.model.getX() + 1.0):
+        x = self.player.model.getX()
+        y = self.player.model.getY()
+        while (x > self.player.model.getX() - 4.5 and x < self.player.model.getX() + 4.5):
             x = random.uniform(-9, 9)
-        while (y > self.player.model.getY() - 1.0 and y < self.player.model.getY() + 1.0):
+        while (y > self.player.model.getY() - 4.5 and y < self.player.model.getY() + 4.5):
             y = random.uniform(-9, 9)
         position = VBase2(x, y)
 
@@ -128,7 +128,7 @@ class Main(ShowBase, DirectObject):
 
     def spawnItem(self):
         if len(self.itemList) > self.maxItemCount: return False
-        item = random.choice([Heal(), Weapon()])
+        item = random.choice([Heal(), MachineGun()])
         #TODO: set item position, ID and other necessary things
         self.itemList.append(item)
         return True
@@ -143,6 +143,9 @@ class Main(ShowBase, DirectObject):
             return False
         else:
             self.AiWorld.update()
+            for enemy in self.enemyList:
+                enemy.model.setP(-90)
+                enemy.model.setH(enemy.model.getH() + 180)
         return task.cont
 
     def addToTrav(self, _object):

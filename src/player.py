@@ -16,11 +16,8 @@ class Player(DirectObject):
             "down":False
             }
         base.camera.setPos(0,0,0)
-        self.model = loader.loadModel("Player")
-        #self.model.setP(-90)
+        self.model = loader.loadModel("PlayerHoldPistol")
         base.camera.setP(-90)
-        #base.camera.setP(90)
-        #base.camera.reparentTo(self.model)
         self.playerHud = Hud()
         self.playerHud.hide()
         self.model.hide()
@@ -61,7 +58,6 @@ class Player(DirectObject):
     def start(self, startPos, playerName):
         self.name = playerName
         self.points = 0
-        self.model.show()
         self.model.reparentTo(render)
         self.model.setPos(startPos.x,
                           startPos.y,
@@ -71,15 +67,14 @@ class Player(DirectObject):
         taskMgr.add(self.move, "moveTask")
 
     def stop(self):
-        print "stopped"
         taskMgr.remove("moveTask")
         self.ignoreKeys()
         self.playerHud.hide()
         self.model.hide()
 
     def addPoints(self, args):
-        print "add points"
         self.points += 10
+        base.messenger.send("setHighscore", [self.points])
 
     def move(self, task):
         elapsed = globalClock.getDt()
@@ -116,6 +111,14 @@ class Player(DirectObject):
 
     def mountWeapon(self, _weaponToMount):
         self.activeWeapon = _weaponToMount # self.mountSlot[0]
+        self.model.remove_node()
+        if self.activeWeapon.style == "TwoHand":
+            self.model = loader.loadModel("PlayerHoldMG")
+        else:
+            self.model = loader.loadModel("PlayerHoldPistol")
+        self.activeWeapon.model.reparentTo(self.model)
+        self.activeWeapon.model.setY(self.model.getY() - 0.1)
+        self.model.reparentTo(render)
 
     def fireActiveWeapon(self):
         if self.activeWeapon:

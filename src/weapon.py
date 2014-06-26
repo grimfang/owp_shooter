@@ -3,11 +3,17 @@ from panda3d.core import CollisionNode, CollisionSegment
 from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent
 
 class Weapon(DirectObject):
-    def __init__(self, _main, _name, _fireRate, _mountSlot=0):
+    def __init__(self, _main, _name, _fireRate, _mountSlot=0, weaponType="Pistol"):
         self.main = _main
         self.name = _name
         self.fireRate = _fireRate
         self.mountSlot = _mountSlot
+        if weaponType == "Pistol":
+            self.style = "OneHand"
+            self.model = loader.loadModel("Pistol")
+        else:
+            self.style = "TwoHand"
+            self.model = loader.loadModel("MG")
 
         # Control
         self.isFiring = False
@@ -16,9 +22,6 @@ class Weapon(DirectObject):
         self.wepRay = None
         # Make weapon ray
         self.setupRay()
-
-    def setupModel(self):
-        pass
 
     def setAmmo(self):
         pass
@@ -41,10 +44,9 @@ class Weapon(DirectObject):
         self.shootNP = render.attachNewNode(shootNode)
         # add the nodepath to the base traverser
         self.shootTraverser.addCollider(self.shootNP, self.shootingEH)
-        self.shootNP.show()
+        #self.shootNP.show()
 
     def doFire(self, _toPos=(0, 0, 0)):
-        print "Weapon - Fire!!"
         self.isFiring = True
 
         # No idea how the fk this works...
