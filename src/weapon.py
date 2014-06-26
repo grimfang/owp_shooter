@@ -51,6 +51,7 @@ class Weapon(DirectObject):
 
         # No idea how the fk this works...
         self.pickerRay.setPointA(self.main.player.model.getPos())
+        print "PLAYER POS: ",self.main.player.model.getPos()
         self.pickerRay.setPointB(_toPos) # _toPos Should be the mouse clicked pos
 
         for i in self.main.enemyList:
@@ -62,7 +63,9 @@ class Weapon(DirectObject):
                 self.pq.sortEntries()
                 # This is the point at where the mouse ray and the level plane intersect
                 hitPos = self.pq.getEntry(0).getSurfacePoint(render)
+                hitNode = self.pq.getEntry(0).getIntoNodePath()
                 print "WEAPON: ", hitPos
+                print "Weapon: ", hitNode
                 
 
 
@@ -71,3 +74,6 @@ class Weapon(DirectObject):
 
     def reload(self):
         pass
+
+
+        
