@@ -36,7 +36,7 @@ class Main(ShowBase, DirectObject):
         self.disableMouse()
         self.player = Player(self)
         self.enemyList = []
-        self.maxEnemyCount = 0
+        self.maxEnemyCount = 15
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
@@ -121,6 +121,7 @@ class Main(ShowBase, DirectObject):
         for enemy in self.enemyList:
             if enemy.id == enemyID:
                 enemy.stop()
+                self.AiWorld.removeAiChar("Enemy"+str(enemyID))
                 self.enemyList.remove(enemy)
                 return True
         return False
