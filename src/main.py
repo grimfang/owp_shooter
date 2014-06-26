@@ -44,7 +44,6 @@ class Main(ShowBase, DirectObject):
         random.seed()
 
         self.gameStarted = False
-        self.count = 0
 
         # Create Traverser and eventHandler
         cTrav = CollisionTraverser('Main Trav')
@@ -82,8 +81,6 @@ class Main(ShowBase, DirectObject):
         # Also mount the weapon on the player
         self.player.mountWeapon(self.player.mountSlot[0])
 
-        
-
     def stop(self):
         self.level.stop()
         print "player points:", self.player.points
@@ -105,7 +102,7 @@ class Main(ShowBase, DirectObject):
 
     def spawnEnemy(self):
         if len(self.enemyList) > self.maxEnemyCount: return False
-        enemy = Enemy()
+        enemy = Enemy(self)
 
         x = 0.0
         y = 0.0
@@ -116,20 +113,9 @@ class Main(ShowBase, DirectObject):
         position = VBase2(x, y)
 
         enemy.start(position)
-        self.makeAi(enemy)
+        enemy.makeAi()
         self.enemyList.append(enemy)
-        self.count += 1
-
         return True
-
-    def makeAi(self, _ai):
-        
-        # Make some ai character for each
-        self.aiChar = AICharacter("Enemy" + str(self.count), _ai.model, 100, 0.05, 0.5)
-        self.AiWorld.addAiChar(self.aiChar)
-        self.AIbehaviors = self.aiChar.getAiBehaviors()
-
-        self.AIbehaviors.pursue(self.player.model)     
 
     def removeEnemy(self, enemyID):
         for enemy in self.enemyList:
@@ -152,8 +138,10 @@ class Main(ShowBase, DirectObject):
         return task.cont
 
     def AIUpdate(self, task):
-        
-        self.AiWorld.update()
+        if len(self.enemyList) <= 0:
+            return False
+        else:
+            self.AiWorld.update()
         return task.cont
 
     def addToTrav(self, _object):

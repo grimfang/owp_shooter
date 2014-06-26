@@ -1,8 +1,11 @@
 from panda3d.core import CollisionSphere, CollisionNode
 from direct.showbase.DirectObject import DirectObject
 
+from panda3d.ai import AICharacter
+
 class Enemy(DirectObject):
-    def __init__(self):
+    def __init__(self, _main):
+        self.main = _main
         self.id = id(self)
         self.model = loader.loadModel("Enemy")
         self.model.setP(-25)
@@ -44,5 +47,15 @@ class Enemy(DirectObject):
         #elif self.keyMap["right"]:
         #    self.model.setX(self.model.getX() + elapsed)
         return task.cont
+
+    def makeAi(self):
+        
+        # Make some ai character for each
+        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, 100, 0.05, 0.5)
+        self.main.AiWorld.addAiChar(self.aiChar)
+        self.AIbehaviors = self.aiChar.getAiBehaviors()
+
+        self.AIbehaviors.pursue(self.main.player.model)     
+        return self.aiChar
 
 
