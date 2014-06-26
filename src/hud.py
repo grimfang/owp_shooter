@@ -22,7 +22,7 @@ class Hud():
         self.statusHealth.reparentTo(self.frameCharStatus)
 
         self.statusWeapon = OnscreenImage(
-            image = "DefaultWeapon.png",
+            image = "WeaponMG.png",
             scale = (0.1, 1, 0.1),
             pos = (0.285, 0, -0.085))
         self.statusWeapon.setTransparency(True)

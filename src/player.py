@@ -42,11 +42,16 @@ class Player(DirectObject):
         # Add mouse btn for fire()
         self.accept("mouse1", self.fireActiveWeapon)
 
+        # Killed enemies
+        self.accept("killEnemy", self.addPoints)
+
     def ignoreKeys(self):
         self.ignore("w")
         self.ignore("a")
         self.ignore("s")
         self.ignore("d")
+        self.ignore("killEnemy")
+        self.ignore("mouse1")
 
         # Add mouse btn for fire to ignore
 
@@ -66,10 +71,15 @@ class Player(DirectObject):
         taskMgr.add(self.move, "moveTask")
 
     def stop(self):
+        print "stopped"
         taskMgr.remove("moveTask")
         self.ignoreKeys()
         self.playerHud.hide()
         self.model.hide()
+
+    def addPoints(self, args):
+        print "add points"
+        self.points += 10
 
     def move(self, task):
         elapsed = globalClock.getDt()
@@ -108,9 +118,7 @@ class Player(DirectObject):
         self.activeWeapon = _weaponToMount # self.mountSlot[0]
 
     def fireActiveWeapon(self):
-
         if self.activeWeapon:
             mpos = self.main.mouse.getMousePos()
             self.activeWeapon.doFire(mpos)
-            print "heee"
 
