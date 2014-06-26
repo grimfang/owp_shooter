@@ -54,13 +54,15 @@ class Main(ShowBase, DirectObject):
         self.mainMenu.show()
         self.highscore = Highscore()
 
-
         # Menu events
         self.accept("escape", self.quit)
         self.accept("MainMenu_start", self.start)
         self.accept("Highscore_show", self.highscore.show)
         self.accept("MainMenu_quit", self.quit)
         self.accept("Highscore_back", self.mainMenu.show)
+
+        # ingame events
+        self.accept("killEnemy", self.removeEnemy)
 
     def start(self):
         self.level.start()
@@ -75,6 +77,7 @@ class Main(ShowBase, DirectObject):
 
     def stop(self):
         self.level.stop()
+        print "player points:", self.player.points
         self.highscore.setPoints(self.player.name, self.player.points)
         self.player.stop()
         tempIDList = []

@@ -9,11 +9,12 @@ class Level():
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, 0)))
         self.planeNP = self.model.attachNewNode(CollisionNode('cnode'))
         self.planeNP.node().addSolid(plane)
-        self.planeNP.show()
+        self.model.reparentTo(render)
+        self.model.hide()
 
     def start(self):
-        self.model.reparentTo(render)
+        self.model.show()
 
     def stop(self):
-        self.model.remove_node()
+        self.model.hide()
 

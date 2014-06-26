@@ -1,7 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
 from panda3d.core import CollisionNode, CollisionSegment
-from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerQueue
-from hud import Hud
+from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent
 
 class Weapon(DirectObject):
     def __init__(self, _main, _name, _fireRate, _mountSlot=0):
@@ -25,49 +24,35 @@ class Weapon(DirectObject):
         pass
 
     def setupRay(self):
-        self.picker = CollisionTraverser()
+        self.shootTraverser = CollisionTraverser()
         # Setup mouse ray
-        self.pq = CollisionHandlerQueue()
+        self.shootingEH = CollisionHandlerEvent()
+        self.shootingEH.addInPattern('into-%in')
         # Create a collision Node
-        pickerNode = CollisionNode('WeaponRay')
+        shootNode = CollisionNode('WeaponRay')
         # set the nodes collision bitmask
-        pickerNode.setFromCollideMask(BitMask32.bit(1))#GeomNode.getDefaultCollideMask())
-        # create a collision ray
-        self.pickerRay = CollisionSegment()
+        shootNode.setFromCollideMask(BitMask32.bit(1))
+        # create a collision segment (ray like)
+        self.shootRay = CollisionSegment()
         # add the ray as a solid to the picker node
-        pickerNode.addSolid(self.pickerRay)
+        shootNode.addSolid(self.shootRay)
         # create a nodepath with the camera to the picker node
-        self.pickerNP = self.main.player.model.attachNewNode(pickerNode)
+        #self.pickerNP = self.main.player.model.attachNewNode(pickerNode)
+        self.shootNP = render.attachNewNode(shootNode)
         # add the nodepath to the base traverser
-        self.picker.addCollider(self.pickerNP, self.pq)
-        self.pickerNP.show()
-
-        #self.wepRay.setOrigin(self.player.model.getPos())
-        #self.wepRay.setDirection(0, 1, 0)
+        self.shootTraverser.addCollider(self.shootNP, self.shootingEH)
+        self.shootNP.show()
 
     def doFire(self, _toPos=(0, 0, 0)):
         print "Weapon - Fire!!"
         self.isFiring = True
 
         # No idea how the fk this works...
-        self.pickerRay.setPointA(self.main.player.model.getPos())
-        print "PLAYER POS: ",self.main.player.model.getPos()
-        self.pickerRay.setPointB(_toPos) # _toPos Should be the mouse clicked pos
+        self.shootRay.setPointA(self.main.player.model.getPos())
+        self.shootRay.setPointB(_toPos)
 
         for i in self.main.enemyList:
-
-            self.picker.traverse(i.colNP)
-
-            if self.pq.getNumEntries() > 0:
-                # sort the entries to get the closest first
-                self.pq.sortEntries()
-                # This is the point at where the mouse ray and the level plane intersect
-                hitPos = self.pq.getEntry(0).getSurfacePoint(render)
-                hitNode = self.pq.getEntry(0).getIntoNodePath()
-                print "WEAPON: ", hitPos
-                print "Weapon: ", hitNode
-                
-
+            self.shootTraverser.traverse(i.colNP)
 
     def stopFire(self):
         pass
@@ -76,4 +61,4 @@ class Weapon(DirectObject):
         pass
 
 
-        
+
