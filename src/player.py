@@ -31,7 +31,8 @@ class Player(DirectObject):
         self.activeWeapon = None
         self.isAutoActive = False
         self.trigger = False
-        self.lastShot = 0
+        self.lastShot = 0.0
+        self.fireRate = 0.0
 
         self.playerTraverser = CollisionTraverser()
         self.playerEH = CollisionHandlerEvent()
@@ -141,12 +142,18 @@ class Player(DirectObject):
         self.activeWeapon.model.reparentTo(self.model)
         self.activeWeapon.model.setY(self.model.getY() - 0.1)
         self.model.show()
+        self.fireRate = self.activeWeapon.fireRate
 
     def setWeaponTrigger(self, _state):
         self.trigger = _state
 
         if _state:
+            mpos = self.main.mouse.getMousePos()
+            self.activeWeapon.doFire(mpos)
             self.fireActiveWeapon()
+
+        else:
+            taskMgr.remove("Fire")
 
     def fireActiveWeapon(self):
         if self.activeWeapon:
@@ -156,20 +163,20 @@ class Player(DirectObject):
 
     def fireUpdate(self, task):
         dt = globalClock.getDt()
-        fireRate = self.activeWeapon.fireRate
         self.lastShot += dt
         mpos = self.main.mouse.getMousePos()
         #print self.lastShot
-        if self.lastShot >= fireRate:
-            self.lastShot -= fireRate
+        if self.lastShot >= self.fireRate:
+            self.lastShot -= self.fireRate
 
             if self.trigger:
                 self.activeWeapon.doFire(mpos)
-        return task.cont
+                #task.delayTime += self.fireRate
+        return task.again
     
     def setMouseBtn(self):
         self.trigger = False
-        taskMgr.remove("Fire")
+        
         print "Mouse Released"
 
     def addEnemyDmgEvent(self, _id):
