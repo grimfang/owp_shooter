@@ -18,9 +18,9 @@ class Enemy(DirectObject):
         self.colNP = self.model.attachNewNode(cnode)
         #self.colNP.show()
 
-    def start(self, startPos):
+    def start(self, startPos, enemyParent):
         self.model.show()
-        self.model.reparentTo(render)
+        self.model.reparentTo(enemyParent)
         self.model.setPos(startPos.x,
                           startPos.y,
                           0)
@@ -30,7 +30,7 @@ class Enemy(DirectObject):
         self.model.remove_node()
         self.ignore("into-" + "colEnemy" + str(self.id))
 
-    def hit(self, arg):
+    def hit(self):
         base.messenger.send("killEnemy", [self.id])
 
     def makeAi(self):
