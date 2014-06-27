@@ -107,6 +107,7 @@ class Main(ShowBase, DirectObject):
 
         enemy.start(position)
         enemy.makeAi()
+        self.player.addEnemyDmgEvent(enemy.id)
         self.enemyList.append(enemy)
         return True
 

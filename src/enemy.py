@@ -14,6 +14,7 @@ class Enemy(DirectObject):
         cs = CollisionSphere(0, 0, 0, 1)
         cnode = CollisionNode('colEnemy' + str(self.id))
         cnode.addSolid(cs)
+        self.model.setTag("enemy", "damage")
         self.colNP = self.model.attachNewNode(cnode)
         #self.colNP.show()
 

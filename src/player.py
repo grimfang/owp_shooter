@@ -34,6 +34,7 @@ class Player(DirectObject):
         self.playerEH = CollisionHandlerEvent()
         self.playerEH.addInPattern('into-%in')
         self.playerEH.addInPattern('colIn-%fn')
+        self.playerEH.addInPattern('bot-%(enemy)fh')
         playerCNode = CollisionNode('playerSphere')
         playerCNode.setFromCollideMask(BitMask32.bit(1))
         self.playerSphere = CollisionSphere(0, 0, 0, 1)
@@ -139,4 +140,10 @@ class Player(DirectObject):
         if self.activeWeapon:
             mpos = self.main.mouse.getMousePos()
             self.activeWeapon.doFire(mpos)
+
+    def addEnemyDmgEvent(self, _id):
+        self.accept("bot-" + "colEnemy" + str(_id), self.doDamage)
+
+    def doDamage(self):
+        print "We have lift off!!"
 
