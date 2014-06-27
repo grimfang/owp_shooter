@@ -5,9 +5,11 @@ from panda3d.core import BitMask32
 from panda3d.core import CollisionHandlerQueue
 from panda3d.core import CollisionTraverser
 from panda3d.core import Point3
+from panda3d.core import WindowProperties
 
 class Mouse(DirectObject):
     def __init__(self, levelNP):
+        self.setCursor()
         # store the nodepath to the level collisions
         # will be used to check for intersections with the mouse ray
         self.levelNP = levelNP
@@ -27,6 +29,18 @@ class Mouse(DirectObject):
         self.pickerNP = base.camera.attachNewNode(pickerNode)
         # add the nodepath to the base traverser
         self.picker.addCollider(self.pickerNP, self.pq)
+
+    def setCursor(self):
+        cursor = loader.loadModel("cursor")
+        cursor.setScale(0.1)
+        cursor.reparentTo(render2d)
+        cursor.setBin('fixed', 100)
+        
+
+        props = WindowProperties()
+        props.setCursorHidden(True)
+        base.win.requestProperties(props)
+        base.mouseWatcherNode.setGeometry(cursor.node())
 
     def getMousePos(self):
         # check if we have a mouse on the window
