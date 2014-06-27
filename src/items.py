@@ -2,7 +2,7 @@ from panda3d.core import CollisionSphere, CollisionNode
 class Heal():
     def __init__(self):
         self.id = id(self)
-        self.model = loader.loadModel("HealPod")
+        self.model = loader.loadModel("ItemHeal")
         cs = CollisionSphere(0, 0, 0, 1)
         cnode = CollisionNode('itemHeal' + str(self.id))
         cnode.addSolid(cs)
