@@ -35,7 +35,6 @@ class Mouse(DirectObject):
         cursor.setScale(0.1)
         cursor.reparentTo(render2d)
         cursor.setBin('fixed', 100)
-        
 
         props = WindowProperties()
         props.setCursorHidden(True)
