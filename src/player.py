@@ -29,6 +29,9 @@ class Player(DirectObject):
         # Weapons: size=2, 0=main, 1=offhand
         self.mountSlot = []
         self.activeWeapon = None
+        self.isAutoActive = False
+        self.trigger = False
+        self.lastShot = 0
 
         self.playerTraverser = CollisionTraverser()
         self.playerEH = CollisionHandlerEvent()
@@ -55,7 +58,8 @@ class Player(DirectObject):
         self.accept("d-up", self.setKey, ["right", False])
 
         # Add mouse btn for fire()
-        self.accept("mouse1", self.fireActiveWeapon)
+        self.accept("mouse1", self.setWeaponTrigger, [True])
+        self.accept("mouse1-up", self.setWeaponTrigger, [False])
 
         # Killed enemies
         self.accept("killEnemy", self.addPoints)
@@ -67,6 +71,7 @@ class Player(DirectObject):
         self.ignore("d")
         self.ignore("killEnemy")
         self.ignore("mouse1")
+        self.ignore("mouse1-up")
 
         # Add mouse btn for fire to ignore
 
@@ -137,10 +142,35 @@ class Player(DirectObject):
         self.activeWeapon.model.setY(self.model.getY() - 0.1)
         self.model.show()
 
+    def setWeaponTrigger(self, _state):
+        self.trigger = _state
+
+        if _state:
+            self.fireActiveWeapon()
+
     def fireActiveWeapon(self):
         if self.activeWeapon:
-            mpos = self.main.mouse.getMousePos()
-            self.activeWeapon.doFire(mpos)
+            #mpos = self.main.mouse.getMousePos()
+            taskMgr.add(self.fireUpdate, "Fire")
+            #self.activeWeapon.doFire(mpos)
+
+    def fireUpdate(self, task):
+        dt = globalClock.getDt()
+        fireRate = self.activeWeapon.fireRate
+        self.lastShot += dt
+        mpos = self.main.mouse.getMousePos()
+        #print self.lastShot
+        if self.lastShot >= fireRate:
+            self.lastShot -= fireRate
+
+            if self.trigger:
+                self.activeWeapon.doFire(mpos)
+        return task.cont
+    
+    def setMouseBtn(self):
+        self.trigger = False
+        taskMgr.remove("Fire")
+        print "Mouse Released"
 
     def addEnemyDmgEvent(self, _id):
         self.accept("bot-" + "colEnemy" + str(_id), self.doDamage)
