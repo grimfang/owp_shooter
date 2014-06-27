@@ -41,5 +41,3 @@ class Enemy(DirectObject):
 
         self.AIbehaviors.pursue(self.main.player.model)
         return self.aiChar
-
-
