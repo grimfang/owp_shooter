@@ -35,6 +35,7 @@ class Player(DirectObject):
         self.playerEH.addInPattern('into-%in')
         self.playerEH.addInPattern('colIn-%fn')
         self.playerEH.addInPattern('bot-%(enemy)fh')
+        self.playerEH.addInPattern('heal-%in')
         playerCNode = CollisionNode('playerSphere')
         playerCNode.setFromCollideMask(BitMask32.bit(1))
         self.playerSphere = CollisionSphere(0, 0, 0, 1)
@@ -146,4 +147,10 @@ class Player(DirectObject):
 
     def doDamage(self):
         print "We have lift off!!"
+
+    def addHealItemEvent(self, _id):
+        self.accept("into-" + "itemHeal" + str(_id), self.healPlayer)
+
+    def healPlayer(self):
+        print "WE ARE HEALED NOW!!"
 

@@ -1,7 +1,9 @@
 from panda3d.core import CollisionSphere, CollisionNode
 class Heal():
-    def __init__(self):
+    def __init__(self, _main):
+        self.main = _main
         self.id = id(self)
+        self.type = "heal"
         self.model = loader.loadModel("ItemHeal")
         cs = CollisionSphere(0, 0, 0, 1)
         cnode = CollisionNode('itemHeal' + str(self.id))
@@ -17,7 +19,9 @@ class Heal():
         self.model.remove_node()
 
 class MachineGun():
-    def __init__(self):
+    def __init__(self, _main):
+        self.main = _main
+        self.type = "gun"
         self.id = id(self)
         self.model = loader.loadModel("ItemMG")
         cs = CollisionSphere(0, 0, 0, 1)

@@ -122,7 +122,7 @@ class Main(ShowBase, DirectObject):
 
     def spawnItem(self):
         if len(self.itemList) > self.maxItemCount: return False
-        item = random.choice([Heal(), MachineGun()])
+        item = random.choice([Heal(self), MachineGun(self)])
 
         x = self.player.model.getX()
         y = self.player.model.getY()
@@ -133,8 +133,11 @@ class Main(ShowBase, DirectObject):
         position = VBase2(x, y)
 
         item.start(position)
-
         self.itemList.append(item)
+
+        if item.type == "heal":
+            self.player.addHealItemEvent(item.id)
+
         return True
 
     def world(self, task):
