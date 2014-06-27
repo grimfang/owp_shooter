@@ -18,6 +18,9 @@ class Enemy(DirectObject):
         self.colNP = self.model.attachNewNode(cnode)
         #self.colNP.show()
 
+        # Game state
+        self.health = 100.0
+
     def start(self, startPos, enemyParent):
         self.model.show()
         self.model.reparentTo(enemyParent)
@@ -31,7 +34,10 @@ class Enemy(DirectObject):
         self.ignore("into-" + "colEnemy" + str(self.id))
 
     def hit(self):
-        base.messenger.send("killEnemy", [self.id])
+        if self.health == 0:
+            base.messenger.send("killEnemy", [self.id])
+        else:
+            self.health -= 20
 
     def makeAi(self):
         # Make some ai character for each
