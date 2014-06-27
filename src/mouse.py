@@ -1,3 +1,4 @@
+import sys
 from direct.showbase.DirectObject import DirectObject
 from panda3d.core import CollisionNode
 from panda3d.core import CollisionRay
@@ -31,16 +32,13 @@ class Mouse(DirectObject):
         self.picker.addCollider(self.pickerNP, self.pq)
 
     def setCursor(self):
-        cursor = loader.loadModel("cursor")
-        cursor.setScale(0.1)
-        cursor.reparentTo(render2d)
-        cursor.setBin('fixed', 100)
-        
-
+        base.win.clearRejectedProperties()
         props = WindowProperties()
-        props.setCursorHidden(True)
+        if sys.platform.startswith('linux'):
+            props.setCursorFilename("./assets/cursor.x11")
+        else:
+            props.setCursorFilename("./assets/cursor.ico")
         base.win.requestProperties(props)
-        base.mouseWatcherNode.setGeometry(cursor.node())
 
     def getMousePos(self):
         # check if we have a mouse on the window
