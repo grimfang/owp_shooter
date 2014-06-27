@@ -40,6 +40,7 @@ class Main(ShowBase, DirectObject):
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
+        self.enemyParent = render.attachNewNode("EnemyParrent")
         self.mouse = Mouse(self.level.planeNP)
         random.seed()
 
@@ -105,7 +106,7 @@ class Main(ShowBase, DirectObject):
             y = random.uniform(-9, 9)
         position = VBase2(x, y)
 
-        enemy.start(position)
+        enemy.start(position, self.enemyParent)
         enemy.makeAi()
         self.player.addEnemyDmgEvent(enemy.id)
         self.enemyList.append(enemy)
