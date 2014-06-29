@@ -33,15 +33,15 @@ class Enemy(DirectObject):
         self.model.remove_node()
         self.ignore("into-" + "colEnemy" + str(self.id))
 
-    def hit(self):
+    def hit(self, _dmg):
         if self.health == 0:
             base.messenger.send("killEnemy", [self.id])
         else:
-            self.health -= 20
+            self.health -= _dmg
 
     def makeAi(self):
         # Make some ai character for each
-        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, 100, 0.05, 0.5)
+        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, 100, 0.05, 1)
         self.main.AiWorld.addAiChar(self.aiChar)
         self.AIbehaviors = self.aiChar.getAiBehaviors()
 

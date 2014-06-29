@@ -36,7 +36,7 @@ class Player(DirectObject):
 
         self.playerTraverser = CollisionTraverser()
         self.playerEH = CollisionHandlerEvent()
-        self.playerEH.addInPattern('into-%in')
+        self.playerEH.addInPattern('intoPlayer-%in')
         self.playerEH.addInPattern('colIn-%fn')
         self.playerEH.addInPattern('bot-%(enemy)fh')
         self.playerEH.addInPattern('heal-%in')
@@ -180,7 +180,7 @@ class Player(DirectObject):
         print "Mouse Released"
 
     def addEnemyDmgEvent(self, _id):
-        self.accept("bot-" + "colEnemy" + str(_id), self.doDamage)
+        self.accept("intoPlayer-" + "colEnemy" + str(_id), self.doDamage)
 
     def doDamage(self):
         print "We have lift off!!"

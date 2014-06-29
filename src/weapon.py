@@ -3,10 +3,11 @@ from panda3d.core import CollisionNode, CollisionSegment
 from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
 
 class Weapon(DirectObject):
-    def __init__(self, _main, _name, _fireRate, _mountSlot=0, weaponType="Pistol"):
+    def __init__(self, _main, _name, _fireRate, _dmg=20,_mountSlot=0, weaponType="Pistol"):
         self.main = _main
         self.name = _name
         self.fireRate = _fireRate
+        self.dmg = _dmg
         self.mountSlot = _mountSlot
         if weaponType == "Pistol":
             self.style = "OneHand"
@@ -58,7 +59,7 @@ class Weapon(DirectObject):
         if self.shootingQH.getNumEntries() > 0:
             self.shootingQH.sortEntries()
             enemyCol = self.shootingQH.getEntry(0).getIntoNodePath().node().getName()
-            base.messenger.send("into-" + enemyCol)
+            base.messenger.send("into-" + enemyCol, [self.dmg])
 
     def stopFire(self):
         pass
