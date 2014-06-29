@@ -52,8 +52,12 @@ class Weapon(DirectObject):
     def doFire(self, _toPos=(0, 0, 0)):
         self.isFiring = True
 
+        # For some reason the mouse ray end up at posZ -1 (which causes a problem when we make the enemy spheres smaller in radius)
+        # so here for now.. ill make a quick fix.
+        adjustedZ = (_toPos[0], _toPos[1], 0)
+
         self.shootRay.setPointA(self.main.player.model.getPos())
-        self.shootRay.setPointB(_toPos)
+        self.shootRay.setPointB(adjustedZ)
 
         self.shootTraverser.traverse(self.main.enemyParent)
         if self.shootingQH.getNumEntries() > 0:

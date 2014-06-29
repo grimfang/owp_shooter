@@ -10,6 +10,7 @@ class Player(DirectObject):
         self.main = _main
         self.name = ""
         self.points = 0
+        self.health = 100.0
         self.runSpeed = 1.8
         self.keyMap = {
             "left":False,
@@ -22,7 +23,7 @@ class Player(DirectObject):
         self.model.find('**/+SequenceNode').node().stop()
         self.model.find('**/+SequenceNode').node().pose(0)
         base.camera.setP(-90)
-        self.playerHud = Hud()
+        self.playerHud = Hud(self)
         self.playerHud.hide()
         self.model.hide()
 
@@ -39,10 +40,10 @@ class Player(DirectObject):
         self.playerEH.addInPattern('intoPlayer-%in')
         self.playerEH.addInPattern('colIn-%fn')
         self.playerEH.addInPattern('bot-%(enemy)fh')
-        self.playerEH.addInPattern('heal-%in')
+        self.playerEH.addInPattern('intoHeal-%in')
         playerCNode = CollisionNode('playerSphere')
         playerCNode.setFromCollideMask(BitMask32.bit(1))
-        self.playerSphere = CollisionSphere(0, 0, 0, 1)
+        self.playerSphere = CollisionSphere(0, 0, 0, 0.6)
         playerCNode.addSolid(self.playerSphere)
         self.playerNP = self.model.attachNewNode(playerCNode)
         self.playerTraverser.addCollider(self.playerNP, self.playerEH)
@@ -102,6 +103,8 @@ class Player(DirectObject):
 
     def move(self, task):
         elapsed = globalClock.getDt()
+        self.playerTraverser.traverse(self.main.enemyParent)
+        self.playerTraverser.traverse(self.main.itemParent)
 
         # set headding
         pos = self.main.mouse.getMousePos()
@@ -182,12 +185,45 @@ class Player(DirectObject):
     def addEnemyDmgEvent(self, _id):
         self.accept("intoPlayer-" + "colEnemy" + str(_id), self.doDamage)
 
-    def doDamage(self):
-        print "We have lift off!!"
+    def doDamage(self, _entry):
+        # Will have to calculate damage done better i guess this is way to fast :P
+        #enemyColNameID = _entry.getIntoNodePath().node().getName()
+        #enemyID = enemyColNameID[8:]
+
+        if self.health == 0:
+            print "KILLED IN ACTION"
+        else:
+            self.health -= 0.5#enemyDmg
+            print "Remaining Health: ", self.health
+        """
+        for enemy in self.main.enemyList:
+            if enemy.id == enemyID:
+        
+                enemy = enemy
+                enemyDmg = enemy.damageDone
+
+                if self.health == 0:
+                    print "KILLED IN ACTION"
+                else:
+                    self.health -= enemyDmg
+                    print "Remaining Health: ", self.health
+        """
 
     def addHealItemEvent(self, _id):
-        self.accept("into-" + "itemHeal" + str(_id), self.healPlayer)
+        self.accept("intoHeal-" + "itemHeal" + str(_id), self.healPlayer)
 
-    def healPlayer(self):
-        print "WE ARE HEALED NOW!!"
+    def healPlayer(self, _entry):
+        itemColName = _entry.getIntoNodePath().node().getName()
+        
+        if self.health == 100:
+            pass
+
+        else:
+            self.health += 50
+            base.messenger.send("into-" + itemColName)
+            if self.health > 100:
+                self.health = 100
+
+        print self.health
+        
 

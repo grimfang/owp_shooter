@@ -11,15 +11,15 @@ class Enemy(DirectObject):
         self.model.setP(-90)
         self.model.setH(180)
         self.model.hide()
-        cs = CollisionSphere(0, 0, 0, 1)
+        cs = CollisionSphere(0, 0, 0, 0.5)
         cnode = CollisionNode('colEnemy' + str(self.id))
         cnode.addSolid(cs)
-        self.model.setTag("enemy", "damage")
         self.colNP = self.model.attachNewNode(cnode)
         #self.colNP.show()
 
         # Game state
         self.health = 100.0
+        self.damageDone = 5
 
     def start(self, startPos, enemyParent):
         self.model.show()

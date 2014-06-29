@@ -40,7 +40,8 @@ class Main(ShowBase, DirectObject):
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
-        self.enemyParent = render.attachNewNode("EnemyParrent")
+        self.enemyParent = render.attachNewNode("EnemyParent")
+        self.itemParent = render.attachNewNode("ItemParent")
         self.mouse = Mouse(self.level.planeNP)
         random.seed()
 
@@ -60,6 +61,7 @@ class Main(ShowBase, DirectObject):
 
         # ingame events
         self.accept("killEnemy", self.removeEnemy)
+        self.accept("pickedUpHealth", self.removeHealItem)
 
     def start(self):
         self.gameStarted = True
@@ -71,7 +73,7 @@ class Main(ShowBase, DirectObject):
         self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
         # Create a basic weapon
-        self.player.mountSlot.append(Weapon(self, "rayGun", 0.3, 25,weaponType="MG"))
+        self.player.mountSlot.append(Weapon(self, "rayGun", 0.25, 50,weaponType="MG"))
         # Also mount the weapon on the player
         self.player.mountWeapon(self.player.mountSlot[0])
 
@@ -118,6 +120,14 @@ class Main(ShowBase, DirectObject):
                 enemy.stop()
                 self.AiWorld.removeAiChar("Enemy"+str(enemyID))
                 self.enemyList.remove(enemy)
+                return True
+        return False
+
+    def removeHealItem(self, itemId):
+        for item in self.itemList:
+            if item.id == itemId:
+                item.stop()
+                self.itemList.remove(item)
                 return True
         return False
 
