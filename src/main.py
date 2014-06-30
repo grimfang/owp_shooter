@@ -73,7 +73,7 @@ class Main(ShowBase, DirectObject):
         self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
         # Create a basic weapon
-        self.player.mountSlot.append(Weapon(self, "rayGun", 0.25, 50,weaponType="MG"))
+        self.player.mountSlot.append(Weapon(self, "rayGun", 0.15, 50,weaponType="MG"))
         # Also mount the weapon on the player
         self.player.mountWeapon(self.player.mountSlot[0])
 

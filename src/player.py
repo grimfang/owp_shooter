@@ -75,6 +75,12 @@ class Player(DirectObject):
         self.ignore("mouse1")
         self.ignore("mouse1-up")
 
+        for item in self.main.itemList:
+            self.ignore("intoHeal-" + "itemHeal" + str(item.id))
+
+        for enemy in self.main.enemyList:
+            self.ignore("intoPlayer-" + "colEnemy" + str(enemy.id))
+
         # Add mouse btn for fire to ignore
 
     def setKey(self, action, pressed):
@@ -192,6 +198,7 @@ class Player(DirectObject):
 
         if self.health == 0:
             print "KILLED IN ACTION"
+            self.main.stop()
         else:
             self.health -= 0.5#enemyDmg
             print "Remaining Health: ", self.health
