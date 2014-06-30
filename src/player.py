@@ -93,6 +93,7 @@ class Player(DirectObject):
     def start(self, startPos, playerName):
         self.name = playerName
         self.points = 0
+        self.health = 100
         self.model.reparentTo(render)
         self.model.setPos(startPos.x,
                           startPos.y,
@@ -163,8 +164,8 @@ class Player(DirectObject):
         if _state:
             mpos = self.main.mouse.getMousePos()
             self.activeWeapon.doFire(mpos)
-            self.fireActiveWeapon()
-
+            if self.activeWeapon.weaponType == "MG":
+                self.fireActiveWeapon()
         else:
             taskMgr.remove("Fire")
 

@@ -15,7 +15,7 @@ from direct.showbase.ShowBase import ShowBase
 from direct.showbase.DirectObject import DirectObject
 
 from panda3d.core import VBase2
-from panda3d.core import Vec4
+from panda3d.core import Vec4, ClockObject
 from panda3d.core import CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
 from panda3d.ai import *
 
@@ -32,6 +32,11 @@ import random
 class Main(ShowBase, DirectObject):
     def __init__(self):
         ShowBase.__init__(self)
+
+        # Set the frame rate lock
+        globalClock.setMode(ClockObject.MLimited)
+        globalClock.setFrameRate(30)
+
         self.win.setClearColor(Vec4(0.12,0.43,0.18,1))
         self.disableMouse()
         self.player = Player(self)
@@ -75,7 +80,7 @@ class Main(ShowBase, DirectObject):
         self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
         # Create a basic weapon
-        self.player.mountSlot.append(Weapon(self, "rayGun", 0.15, 50,weaponType="MG"))
+        self.player.mountSlot.append(Weapon(self, "MachineGun", 0.15, 50,weaponType="MG"))
         # Also mount the weapon on the player
         self.player.mountWeapon(self.player.mountSlot[0])
 

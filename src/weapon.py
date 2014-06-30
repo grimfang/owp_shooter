@@ -8,6 +8,7 @@ class Weapon(DirectObject):
         self.name = _name
         self.fireRate = _fireRate
         self.dmg = _dmg
+        self.weaponType = weaponType
         self.mountSlot = _mountSlot
         if weaponType == "Pistol":
             self.style = "OneHand"

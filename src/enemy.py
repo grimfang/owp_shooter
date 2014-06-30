@@ -41,7 +41,7 @@ class Enemy(DirectObject):
 
     def makeAi(self):
         # Make some ai character for each
-        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, -15, 0.05, 0.5)
+        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, -100, 0.05, 5)
         self.main.AiWorld.addAiChar(self.aiChar)
         self.AIbehaviors = self.aiChar.getAiBehaviors()
 
