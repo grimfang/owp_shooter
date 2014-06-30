@@ -1,0 +1,113 @@
+<Comment> {
+  "egg-texture-cards -o muzzleflash.egg -p 50,50 ./MuzzleFlash01.png ./MuzzleFlash02.png ./MuzzleFlash03.png ./MuzzleFlash04.png"
+}
+<Texture> MuzzleFlash04 {
+  "./MuzzleFlash04.png"
+}
+<Texture> MuzzleFlash03 {
+  "./MuzzleFlash03.png"
+}
+<Texture> MuzzleFlash02 {
+  "./MuzzleFlash02.png"
+}
+<Texture> MuzzleFlash01 {
+  "./MuzzleFlash01.png"
+}
+<Group> {
+  <Switch> { 1 }
+  <Scalar> fps { 2 }
+  <VertexPool> vpool {
+    <Vertex> 0 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 1 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 2 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 3 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+    <Vertex> 4 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 5 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 6 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 7 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+    <Vertex> 8 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 9 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 10 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 11 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+    <Vertex> 12 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 13 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 14 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 15 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+  }
+  <Group> MuzzleFlash01 {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { MuzzleFlash01 }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> MuzzleFlash02 {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { MuzzleFlash02 }
+      <VertexRef> { 4 5 6 7 <Ref> { vpool } }
+    }
+  }
+  <Group> MuzzleFlash03 {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { MuzzleFlash03 }
+      <VertexRef> { 8 9 10 11 <Ref> { vpool } }
+    }
+  }
+  <Group> MuzzleFlash04 {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { MuzzleFlash04 }
+      <VertexRef> { 12 13 14 15 <Ref> { vpool } }
+    }
+  }
+}
