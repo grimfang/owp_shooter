@@ -17,6 +17,14 @@ class Weapon(DirectObject):
         else:
             self.style = "TwoHand"
             self.model = loader.loadModel("MG")
+        self.muzzleFlash = loader.loadModel("muzzleflash")
+        self.muzzleFlash.reparentTo(self.model)
+        self.muzzleFlash.setZ(0.65)
+        self.muzzleFlash.setX(0.08)
+        self.muzzleFlash.setScale(0.3)
+        self.muzzleFlash.find('**/+SequenceNode').node().stop()
+        self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
+        self.muzzleFlash.hide()
 
         # Load bullet model
         self.bullet = loader.loadModel("Bullet")
@@ -60,6 +68,9 @@ class Weapon(DirectObject):
     def doFire(self, _toPos=(0, 0, 0)):
         self.isFiring = True
 
+        self.muzzleFlash.find('**/+SequenceNode').node().loop(True)
+        self.muzzleFlash.show()
+
         # For some reason the mouse ray end up at posZ -1 (which causes a problem when we make the enemy spheres smaller in radius)
         # so here for now.. ill make a quick fix.
         adjustedZ = (_toPos[0], _toPos[1], 0)
@@ -77,7 +88,8 @@ class Weapon(DirectObject):
             base.messenger.send("into-" + enemyCol, [self.dmg])
 
     def stopFire(self):
-        pass
+        self.muzzleFlash.find('**/+SequenceNode').node().stop()
+        self.muzzleFlash.hide()
 
     def reload(self):
         pass
