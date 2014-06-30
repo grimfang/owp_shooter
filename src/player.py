@@ -67,6 +67,9 @@ class Player(DirectObject):
         # Killed enemies
         self.accept("killEnemy", self.addPoints)
 
+        # Game states
+        self.accept("doDamageToPlayer", self.doDamage)
+
     def ignoreKeys(self):
         self.ignore("w")
         self.ignore("a")
@@ -194,33 +197,21 @@ class Player(DirectObject):
         print "Mouse Released"
 
     def addEnemyDmgEvent(self, _id):
-        self.accept("intoPlayer-" + "colEnemy" + str(_id), self.doDamage)
+        self.accept("intoPlayer-" + "colEnemy" + str(_id), self.setEnemyAttack)
 
-    def doDamage(self, _entry):
-        # Will have to calculate damage done better i guess this is way to fast :P
-        #enemyColNameID = _entry.getIntoNodePath().node().getName()
-        #enemyID = enemyColNameID[8:]
+    def setEnemyAttack(self, _entry):
+        enemyColName = _entry.getIntoNodePath().node().getName()
+        base.messenger.send("inRange-" + enemyColName, [True])
+
+    def doDamage(self, _dmg):
 
         if self.health == 0:
             print "KILLED IN ACTION"
             self.main.stop()
         else:
-            self.health -= 0.5#enemyDmg
+            self.health -= _dmg
             print "Remaining Health: ", self.health
         base.messenger.send("setHealth", [self.health])
-        """
-        for enemy in self.main.enemyList:
-            if enemy.id == enemyID:
-
-                enemy = enemy
-                enemyDmg = enemy.damageDone
-
-                if self.health == 0:
-                    print "KILLED IN ACTION"
-                else:
-                    self.health -= enemyDmg
-                    print "Remaining Health: ", self.health
-        """
 
     def addHealItemEvent(self, _id):
         self.accept("intoHeal-" + "itemHeal" + str(_id), self.healPlayer)
