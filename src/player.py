@@ -37,11 +37,13 @@ class Player(DirectObject):
 
         self.playerTraverser = CollisionTraverser()
         self.playerEH = CollisionHandlerEvent()
+        ## INTO PATTERNS
         self.playerEH.addInPattern('intoPlayer-%in')
-        self.playerEH.addInPattern('colIn-%fn')
-        self.playerEH.addInPattern('bot-%(enemy)fh')
+        #self.playerEH.addInPattern('colIn-%fn')
         self.playerEH.addInPattern('intoHeal-%in')
         self.playerEH.addInPattern('intoWeapon-%in')
+        ## OUT PATTERNS
+        self.playerEH.addOutPattern('outOfPlayer-%in')
         playerCNode = CollisionNode('playerSphere')
         playerCNode.setFromCollideMask(BitMask32.bit(1))
         self.playerSphere = CollisionSphere(0, 0, 0, 0.6)
@@ -198,15 +200,19 @@ class Player(DirectObject):
 
     def addEnemyDmgEvent(self, _id):
         self.accept("intoPlayer-" + "colEnemy" + str(_id), self.setEnemyAttack)
+        #self.accept("outOfPlayer-" + "colEnemy" + str(_id), self.setEnemyAttackOutOfRange)
 
     def setEnemyAttack(self, _entry):
         enemyColName = _entry.getIntoNodePath().node().getName()
         base.messenger.send("inRange-" + enemyColName, [True])
+    def setEnemyAttackOutOfRange(self, _entry):
+        enemyColName = _entry.getIntoNodePath().node().getName()
+        base.messenger.send("inRange-" + enemyColName)
 
     def doDamage(self, _dmg):
 
         if self.health == 0:
-            print "KILLED IN ACTION"
+            #print "KILLED IN ACTION"
             self.main.stop()
         else:
             self.health -= _dmg
