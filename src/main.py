@@ -41,6 +41,7 @@ class Main(ShowBase, DirectObject):
         self.maxItemCount = 4
         self.level = Level()
         self.enemyParent = render.attachNewNode("EnemyParent")
+        self.enemyParent.setH(180)
         self.itemParent = render.attachNewNode("ItemParent")
         self.mouse = Mouse(self.level.planeNP)
         random.seed()
@@ -166,7 +167,7 @@ class Main(ShowBase, DirectObject):
             self.AiWorld.update()
             for enemy in self.enemyList:
                 enemy.model.setP(-90)
-                enemy.model.setH(enemy.model.getH() + 180)
+                #enemy.model.setH(enemy.model.getH() + 180)
         return task.cont
 
 APP = Main()
