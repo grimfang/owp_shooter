@@ -16,7 +16,6 @@ from direct.showbase.DirectObject import DirectObject
 
 from panda3d.core import VBase2
 from panda3d.core import Vec4, ClockObject
-from panda3d.core import CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
 from panda3d.ai import *
 
 from player import Player
@@ -25,7 +24,6 @@ from level import Level
 from items import Heal, MachineGun
 from mainScreen import MainScreen
 from highscore import Highscore
-from weapon import Weapon
 from mouse import Mouse
 import random
 
@@ -79,10 +77,6 @@ class Main(ShowBase, DirectObject):
         self.AiWorld = AIWorld(render)
         self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
-        # Create a basic weapon
-        self.player.mountSlot.append(Weapon(self, "MachineGun", 0.15, 50,weaponType="MG"))
-        # Also mount the weapon on the player
-        self.player.mountWeapon(self.player.mountSlot[0])
 
     def stop(self):
         self.level.stop()
@@ -180,7 +174,6 @@ class Main(ShowBase, DirectObject):
             self.AiWorld.update()
             for enemy in self.enemyList:
                 enemy.model.setP(-90)
-                #enemy.model.setH(enemy.model.getH() + 180)
         return task.cont
 
 APP = Main()

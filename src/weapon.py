@@ -1,6 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
-from panda3d.core import CollisionNode, CollisionSegment, Point3
-from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
+from panda3d.core import CollisionNode, CollisionSegment
+from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerQueue
 from direct.interval.IntervalGlobal import ProjectileInterval, LerpPosInterval
 
 class Weapon(DirectObject):
@@ -11,19 +11,24 @@ class Weapon(DirectObject):
         self.dmg = _dmg
         self.weaponType = weaponType
         self.mountSlot = _mountSlot
+
+        self.muzzleFlash = loader.loadModel("muzzleflash")
         if weaponType == "Pistol":
             self.style = "OneHand"
             self.model = loader.loadModel("Pistol")
+            self.muzzleFlash.setZ(0.65)
+            self.muzzleFlash.setX(-0.04)
+            self.muzzleFlash.setScale(0.25)
+            self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
         else:
             self.style = "TwoHand"
             self.model = loader.loadModel("MG")
-        self.muzzleFlash = loader.loadModel("muzzleflash")
+            self.muzzleFlash.setZ(0.65)
+            self.muzzleFlash.setX(0.08)
+            self.muzzleFlash.setScale(0.3)
+            self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
         self.muzzleFlash.reparentTo(self.model)
-        self.muzzleFlash.setZ(0.65)
-        self.muzzleFlash.setX(0.08)
-        self.muzzleFlash.setScale(0.3)
         self.muzzleFlash.find('**/+SequenceNode').node().stop()
-        self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
         self.muzzleFlash.hide()
 
         # Load bullet model
@@ -68,7 +73,10 @@ class Weapon(DirectObject):
     def doFire(self, _toPos=(0, 0, 0)):
         self.isFiring = True
 
-        self.muzzleFlash.find('**/+SequenceNode').node().loop(True)
+        if self.weaponType == "Pistol":
+            self.muzzleFlash.find('**/+SequenceNode').node().play(0, 1)
+        else:
+            self.muzzleFlash.find('**/+SequenceNode').node().loop(True)
         self.muzzleFlash.show()
 
         # For some reason the mouse ray end up at posZ -1 (which causes a problem when we make the enemy spheres smaller in radius)
@@ -88,6 +96,17 @@ class Weapon(DirectObject):
             base.messenger.send("into-" + enemyCol, [self.dmg])
 
     def stopFire(self):
+        if self.weaponType == "Pistol" and \
+               self.muzzleFlash.find('**/+SequenceNode').node().isPlaying():
+            taskMgr.add(self.waitForFrame, "waitForFrame")
+            return
+        self.muzzleFlash.find('**/+SequenceNode').node().stop()
+        self.muzzleFlash.hide()
+
+    def waitForFrame(self, task):
+        print "here"
+        if self.muzzleFlash.find('**/+SequenceNode').node().isPlaying():
+            return task.cont
         self.muzzleFlash.find('**/+SequenceNode').node().stop()
         self.muzzleFlash.hide()
 
