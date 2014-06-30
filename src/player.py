@@ -23,7 +23,7 @@ class Player(DirectObject):
         self.model.find('**/+SequenceNode').node().stop()
         self.model.find('**/+SequenceNode').node().pose(0)
         base.camera.setP(-90)
-        self.playerHud = Hud(self)
+        self.playerHud = Hud()
         self.playerHud.hide()
         self.model.hide()
 
@@ -182,10 +182,10 @@ class Player(DirectObject):
                 self.activeWeapon.doFire(mpos)
                 #task.delayTime += self.fireRate
         return task.again
-    
+
     def setMouseBtn(self):
         self.trigger = False
-        
+
         print "Mouse Released"
 
     def addEnemyDmgEvent(self, _id):
@@ -202,10 +202,11 @@ class Player(DirectObject):
         else:
             self.health -= 0.5#enemyDmg
             print "Remaining Health: ", self.health
+        base.messenger.send("setHealth", [self.health])
         """
         for enemy in self.main.enemyList:
             if enemy.id == enemyID:
-        
+
                 enemy = enemy
                 enemyDmg = enemy.damageDone
 
@@ -221,7 +222,7 @@ class Player(DirectObject):
 
     def healPlayer(self, _entry):
         itemColName = _entry.getIntoNodePath().node().getName()
-        
+
         if self.health == 100:
             pass
 
@@ -232,5 +233,5 @@ class Player(DirectObject):
                 self.health = 100
 
         print self.health
-        
+
 
