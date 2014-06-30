@@ -41,6 +41,7 @@ class Player(DirectObject):
         self.playerEH.addInPattern('colIn-%fn')
         self.playerEH.addInPattern('bot-%(enemy)fh')
         self.playerEH.addInPattern('intoHeal-%in')
+        self.playerEH.addInPattern('intoWeapon-%in')
         playerCNode = CollisionNode('playerSphere')
         playerCNode.setFromCollideMask(BitMask32.bit(1))
         self.playerSphere = CollisionSphere(0, 0, 0, 0.6)
@@ -76,7 +77,10 @@ class Player(DirectObject):
         self.ignore("mouse1-up")
 
         for item in self.main.itemList:
-            self.ignore("intoHeal-" + "itemHeal" + str(item.id))
+            if item.type == "heal":
+                self.ignore("intoHeal-" + "itemHeal" + str(item.id))
+            elif item.type == "gun":
+                self. ignore("intoWeapon-" + "itemWeapon" + str(item.id))
 
         for enemy in self.main.enemyList:
             self.ignore("intoPlayer-" + "colEnemy" + str(enemy.id))

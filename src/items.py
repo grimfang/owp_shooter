@@ -35,7 +35,7 @@ class MachineGun(DirectObject):
         self.id = id(self)
         self.model = loader.loadModel("ItemMG")
         cs = CollisionSphere(0, 0, 0, 0.5)
-        cnode = CollisionNode('itemMG' + str(self.id))
+        cnode = CollisionNode('itemWeapon' + str(self.id))
         cnode.addSolid(cs)
         self.colNP = self.model.attachNewNode(cnode)
 
@@ -45,11 +45,11 @@ class MachineGun(DirectObject):
         self.model.setP(-90)
 
         # Game
-        self.accept("into-" + "itemMG" + str(self.id), self.pickup)
+        self.accept("into-" + "itemWeapon" + str(self.id), self.pickup)
 
     def stop(self):
         self.model.remove_node()
-        self.ignore("into-" + "itemMG" + str(self.id))
+        self.ignore("into-" + "itemWeapon" + str(self.id))
 
     def pickup(self):
         base.messenger.send("pickedUpWeapon", [self.id])
