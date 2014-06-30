@@ -155,6 +155,8 @@ class Main(ShowBase, DirectObject):
         """MAIN TASK"""
         self.spawnEnemy()
         self.spawnItem()
+        self.player.playerTraverser.traverse(self.enemyParent)
+        self.player.playerTraverser.traverse(self.itemParent)
         return task.cont
 
     def AIUpdate(self, task):

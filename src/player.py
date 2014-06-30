@@ -103,8 +103,8 @@ class Player(DirectObject):
 
     def move(self, task):
         elapsed = globalClock.getDt()
-        self.playerTraverser.traverse(self.main.enemyParent)
-        self.playerTraverser.traverse(self.main.itemParent)
+        #self.playerTraverser.traverse(self.main.enemyParent)
+        #self.playerTraverser.traverse(self.main.itemParent)
 
         # set headding
         pos = self.main.mouse.getMousePos()
