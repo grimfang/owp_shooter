@@ -234,4 +234,9 @@ class Player(DirectObject):
 
         print self.health
 
+    def addWeaponItemEvent(self, _id):
+        self.accept("intoWeapon-" + "itemWeapon" + str(_id), self.changeWeapon)
 
+    def changeWeapon(self, _entry):
+        itemColName = _entry.getIntoNodePath().node().getName()
+        base.messenger.send("into-" + itemColName)

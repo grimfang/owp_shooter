@@ -62,7 +62,8 @@ class Main(ShowBase, DirectObject):
 
         # ingame events
         self.accept("killEnemy", self.removeEnemy)
-        self.accept("pickedUpHealth", self.removeHealItem)
+        self.accept("pickedUpHealth", self.removeItem)
+        self.accept("pickedUpWeapon", self.removeItem)
 
     def start(self):
         self.gameStarted = True
@@ -87,6 +88,11 @@ class Main(ShowBase, DirectObject):
             tempIDList.append(enemy.id)
         for enemyID in tempIDList:
             self.removeEnemy(enemyID)
+        tempIDList = []
+        for item in self.itemList:
+            tempIDList.append(item.id)
+        for itemID in tempIDList:
+            self.removeItem(itemID)
         self.taskMgr.remove("MAIN TASK")
         self.mainMenu.show()
         self.accept("escape", self.quit)
@@ -124,7 +130,7 @@ class Main(ShowBase, DirectObject):
                 return True
         return False
 
-    def removeHealItem(self, itemId):
+    def removeItem(self, itemId):
         for item in self.itemList:
             if item.id == itemId:
                 item.stop()
@@ -149,6 +155,8 @@ class Main(ShowBase, DirectObject):
 
         if item.type == "heal":
             self.player.addHealItemEvent(item.id)
+        else:
+            self.player.addWeaponItemEvent(item.id)
 
         return True
 

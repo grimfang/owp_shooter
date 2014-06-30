@@ -44,6 +44,13 @@ class MachineGun(DirectObject):
         self.model.setPos(pos.x, pos.y, 0.0)
         self.model.setP(-90)
 
+        # Game
+        self.accept("into-" + "itemMG" + str(self.id), self.pickup)
+
     def stop(self):
         self.model.remove_node()
+        self.ignore("into-" + "itemMG" + str(self.id))
+
+    def pickup(self):
+        base.messenger.send("pickedUpWeapon", [self.id])
 
