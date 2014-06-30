@@ -205,6 +205,7 @@ class Player(DirectObject):
     def setEnemyAttack(self, _entry):
         enemyColName = _entry.getIntoNodePath().node().getName()
         base.messenger.send("inRange-" + enemyColName, [True])
+
     def setEnemyAttackOutOfRange(self, _entry):
         enemyColName = _entry.getIntoNodePath().node().getName()
         base.messenger.send("inRange-" + enemyColName)

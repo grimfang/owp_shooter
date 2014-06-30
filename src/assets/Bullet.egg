@@ -1,0 +1,66 @@
+<CoordinateSystem> { Z-Up }
+
+<Comment> {
+  "egg-trans -tbnall -o /home/lext/development/Sources/GitProjects/grimfang_projects/OWP/owp_shooter/src/assets/Bullet.egg /home/lext/development/Sources/GitProjects/grimfang_projects/OWP/owp_shooter/src/assets/Bullet.egg"
+}
+<Material> Material.001 {
+  <Scalar> diffr { 0.8 }
+  <Scalar> diffg { 0.009021 }
+  <Scalar> diffb { 0 }
+  <Scalar> emitr { 0 }
+  <Scalar> emitg { 0 }
+  <Scalar> emitb { 0 }
+  <Scalar> specr { 0.5 }
+  <Scalar> specg { 0.5 }
+  <Scalar> specb { 0.5 }
+  <Scalar> shininess { 12.5 }
+}
+<Group> Plane {
+  <Transform> {
+    <Matrix4> {
+      0.033768 0 0 0
+      0 0.033768 0 0
+      0 0 0.033768 0
+      0 0 0 1
+    }
+  }
+  <VertexPool> Plane {
+    <Vertex> 0 {
+      -0.0127546 -0.0337678 0
+      <UV> {
+        6.1e-05 0.377729
+        <Tangent> { -4.84755e-07 1 0 }
+        <Binormal> { -1 -4.84755e-07 0 }
+      }
+    }
+    <Vertex> 1 {
+      -0.00414945 0.0337678 0
+      <UV> {
+        0.999938 0.250328
+        <Tangent> { 0.0119837 0.999928 0 }
+        <Binormal> { -0.999928 0.0119837 0 }
+      }
+    }
+    <Vertex> 2 {
+      0.00414945 0.0337678 0
+      <UV> {
+        0.999938 0.114704
+        <Tangent> { -0.0235374 0.999723 0 }
+        <Binormal> { -0.999723 -0.0235374 0 }
+      }
+    }
+    <Vertex> 3 {
+      0.0127546 -0.0337678 0
+      <UV> {
+        6.1e-05 6.1e-05
+        <Tangent> { -0.012758 0.999919 0 }
+        <Binormal> { -0.999919 -0.012758 0 }
+      }
+    }
+  }
+  <Polygon> {
+    <Normal> { 0 0 1 }
+    <MRef> { Material.001 }
+    <VertexRef> { 0 3 2 1 <Ref> { Plane } }
+  }
+}
