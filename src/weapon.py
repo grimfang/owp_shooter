@@ -67,7 +67,8 @@ class Weapon(DirectObject):
         self.shootRay.setPointA(self.main.player.model.getPos())
         self.shootRay.setPointB(adjustedZ)
 
-        self.setProjectile(self.model.getPos(), adjustedZ)#_toPos)
+        fromPos = self.main.player.model.getPos() #self.model.getPos()
+        self.setProjectile(fromPos, adjustedZ)#_toPos)
 
         self.shootTraverser.traverse(self.main.enemyParent)
         if self.shootingQH.getNumEntries() > 0:
@@ -82,13 +83,19 @@ class Weapon(DirectObject):
         pass
 
     def setProjectile(self, _from, _to):
-        self.bullet.reparentTo(self.model)
+        self.bullet.reparentTo(render)#self.model)
         # setup the projectile interval
         #self.bulletProjectile = ProjectileInterval(self.bullet,
         #                                startPos = Point3(_from),
         #                                duration = 1,
         #                                endPos = Point3(_to))
         #self.bulletProjectile = self.bullet.posInterval(1.0, Point3(_to), startPos=Point3(_from))
+        print "POSITIONS:"
+        print _to
+        print _from
+        frm = render.getPos(self.main.player.model)
+        print frm
+
         self.bulletProjectile = LerpPosInterval(self.bullet, 1.0, _to, _from)
         self.bulletProjectile.start()
 
