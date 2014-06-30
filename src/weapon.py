@@ -1,7 +1,7 @@
 from direct.showbase.DirectObject import DirectObject
 from panda3d.core import CollisionNode, CollisionSegment, Point3
 from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
-from direct.interval.IntervalGlobal import ProjectileInterval
+from direct.interval.IntervalGlobal import ProjectileInterval, LerpPosInterval
 
 class Weapon(DirectObject):
     def __init__(self, _main, _name, _fireRate, _dmg=20,_mountSlot=0, weaponType="Pistol"):
@@ -67,7 +67,7 @@ class Weapon(DirectObject):
         self.shootRay.setPointA(self.main.player.model.getPos())
         self.shootRay.setPointB(adjustedZ)
 
-        self.setProjectile(self.model.getPos(), _toPos)
+        self.setProjectile(self.model.getPos(), adjustedZ)#_toPos)
 
         self.shootTraverser.traverse(self.main.enemyParent)
         if self.shootingQH.getNumEntries() > 0:
@@ -84,10 +84,12 @@ class Weapon(DirectObject):
     def setProjectile(self, _from, _to):
         self.bullet.reparentTo(self.model)
         # setup the projectile interval
-        self.bulletProjectile = ProjectileInterval(self.bullet,
-                                        startPos = Point3(_from),
-                                        duration = 1,
-                                        endPos = Point3(_to))
+        #self.bulletProjectile = ProjectileInterval(self.bullet,
+        #                                startPos = Point3(_from),
+        #                                duration = 1,
+        #                                endPos = Point3(_to))
+        #self.bulletProjectile = self.bullet.posInterval(1.0, Point3(_to), startPos=Point3(_from))
+        self.bulletProjectile = LerpPosInterval(self.bullet, 1.0, _to, _from)
         self.bulletProjectile.start()
 
 
