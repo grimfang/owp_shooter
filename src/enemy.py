@@ -21,7 +21,7 @@ class Enemy(DirectObject):
         self.health = 100.0
         self.damageDone = 0.1
         self.lastShot = 0.0
-        self.attackRate = 2.0
+        self.attackRate = 10.0
 
     def start(self, startPos, enemyParent):
         self.model.show()
@@ -54,11 +54,11 @@ class Enemy(DirectObject):
 
     def startAttack(self, _inRange=False):
 
-        if _inRange:
-            self.isAttacking = True
-            taskMgr.add(self.attack, "StartAttack")
-        else:
+        if not _inRange:
+            self.isAttacking = False
             taskMgr.remove("StartAttack")
+        elif _inRange:
+            taskMgr.add(self.attack, "StartAttack")
 
     def attack(self, task):
         dt = globalClock.getDt()

@@ -22,7 +22,7 @@ class Weapon(DirectObject):
         self.bullet = loader.loadModel("Bullet")
         self.bullet.setP(-90)
         self.bullet.setH(180)
-        self.bullet.setPos(0, 0.5, 0)
+        #self.bullet.setPos(0, 0.5, 0)
 
         # Control
         self.isFiring = False
@@ -84,12 +84,12 @@ class Weapon(DirectObject):
     def setProjectile(self, _from, _to):
         self.bullet.reparentTo(self.model)
         # setup the projectile interval
-        #self.bulletProjectile = ProjectileInterval(self.bullet,
-        #                                startPos = Point3(_from),
-        #                                duration = 1,
-        #                                endPos = Point3(_to))
+        self.bulletProjectile = ProjectileInterval(self.bullet,
+                                        startPos = Point3(_from),
+                                        duration = 1,
+                                        endPos = Point3(_to))
         #self.bulletProjectile = self.bullet.posInterval(1.0, Point3(_to), startPos=Point3(_from))
-        self.bulletProjectile = LerpPosInterval(self.bullet, 1.0, _to, _from)
+        #self.bulletProjectile = LerpPosInterval(self.bullet, 2.0, _to, _from)
         self.bulletProjectile.start()
 
 
