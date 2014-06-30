@@ -172,6 +172,7 @@ class Player(DirectObject):
             if self.activeWeapon.weaponType == "MG":
                 self.fireActiveWeapon()
         else:
+            self.activeWeapon.stopFire()
             taskMgr.remove("Fire")
 
     def fireActiveWeapon(self):
@@ -212,7 +213,7 @@ class Player(DirectObject):
 
     def doDamage(self, _dmg):
 
-        if self.health == 0:
+        if self.health <= 0:
             #print "KILLED IN ACTION"
             self.main.stop()
         else:
