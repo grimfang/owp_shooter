@@ -27,6 +27,7 @@ class Weapon(DirectObject):
             self.muzzleFlash.setX(0.08)
             self.muzzleFlash.setScale(0.3)
             self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
+        self.model.setY(2)
         self.muzzleFlash.reparentTo(self.model)
         self.muzzleFlash.find('**/+SequenceNode').node().stop()
         self.muzzleFlash.hide()
@@ -44,6 +45,7 @@ class Weapon(DirectObject):
         self.wepRay = None
         # Make weapon ray
         self.setupRay()
+        self.model.show()
 
     def setAmmo(self):
         pass
@@ -104,7 +106,6 @@ class Weapon(DirectObject):
         self.muzzleFlash.hide()
 
     def waitForFrame(self, task):
-        print "here"
         if self.muzzleFlash.find('**/+SequenceNode').node().isPlaying():
             return task.cont
         self.muzzleFlash.find('**/+SequenceNode').node().stop()
