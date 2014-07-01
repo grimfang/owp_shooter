@@ -39,7 +39,7 @@ class Main(ShowBase, DirectObject):
         self.disableMouse()
         self.player = Player(self)
         self.enemyList = []
-        self.maxEnemyCount = 1
+        self.maxEnemyCount = 15
         self.itemList = []
         self.maxItemCount = 4
         self.level = Level()
