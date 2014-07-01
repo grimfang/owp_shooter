@@ -66,4 +66,9 @@ class Hud(DirectObject):
             self.statusHealth.setImage("HUD_Life0.png")
         self.statusHealth.setTransparency(True)
 
-
+    def setWeapon(self, weaponType):
+        if weaponType == "Pistol":
+            self.statusWeapon.setImage("WeaponPistol.png")
+        else:
+            self.statusWeapon.setImage("WeaponMG.png")
+        self.statusWeapon.setTransparency(True)
