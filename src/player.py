@@ -2,8 +2,8 @@ from panda3d.core import CollisionSphere, CollisionNode
 from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent
 from direct.showbase.DirectObject import DirectObject
 from hud import Hud
+from weapon import Weapon
 
-import math
 
 class Player(DirectObject):
     def __init__(self, _main):
@@ -51,6 +51,12 @@ class Player(DirectObject):
         self.playerNP = self.model.attachNewNode(playerCNode)
         self.playerTraverser.addCollider(self.playerNP, self.playerEH)
         #self.playerNP.show()
+
+        # Create a basic weapon
+        #self.player.mountSlot.append(Weapon(self, "MachineGun", 0.15, 50, weaponType="MG"))
+        self.mountSlot.append(Weapon(self.main, "Pistol", 0.30, 25, weaponType="Pistol"))
+        # Also mount the weapon on the player
+        self.mountWeapon(self.mountSlot[0])
 
     def acceptKeys(self):
         self.accept("w", self.setKey, ["up", True])
@@ -163,6 +169,9 @@ class Player(DirectObject):
         self.model.show()
         self.fireRate = self.activeWeapon.fireRate
 
+    def unmountWeapon(self):
+        self.activeWeapon.model.hide()
+
     def setWeaponTrigger(self, _state):
         self.trigger = _state
 
@@ -171,7 +180,10 @@ class Player(DirectObject):
             self.activeWeapon.doFire(mpos)
             if self.activeWeapon.weaponType == "MG":
                 self.fireActiveWeapon()
+            else:
+                self.activeWeapon.stopFire()
         else:
+            self.activeWeapon.stopFire()
             taskMgr.remove("Fire")
 
     def fireActiveWeapon(self):
@@ -212,7 +224,7 @@ class Player(DirectObject):
 
     def doDamage(self, _dmg):
 
-        if self.health == 0:
+        if self.health <= 0:
             #print "KILLED IN ACTION"
             self.main.stop()
         else:
@@ -243,3 +255,7 @@ class Player(DirectObject):
     def changeWeapon(self, _entry):
         itemColName = _entry.getIntoNodePath().node().getName()
         base.messenger.send("into-" + itemColName)
+        self.mountSlot.append(Weapon(self.main, "MachineGun", 0.15, 50, weaponType="MG"))
+        self.unmountWeapon()
+        self.mountWeapon(self.mountSlot[len(self.mountSlot) - 1])
+

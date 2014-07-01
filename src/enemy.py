@@ -1,5 +1,6 @@
 from panda3d.core import CollisionSphere, CollisionNode
 from direct.showbase.DirectObject import DirectObject
+from direct.gui.DirectGui import DirectWaitBar
 
 from panda3d.ai import AICharacter
 
@@ -23,6 +24,18 @@ class Enemy(DirectObject):
         self.lastShot = 0.0
         self.attackRate = 10.0
 
+
+        self.statusHealth = DirectWaitBar(
+            text = "",
+            value = 100,
+            frameSize = (0.12, 0.8, -0.12, 0.0),
+            pos = (-0.5, 0, -0.5),
+            barColor = (1, 0, 0, 1))
+        self.statusHealth.reparentTo(self.model)
+        self.statusHealth.setDepthWrite(False)
+        self.statusHealth.setBin('fixed', 0)
+        self.statusHealth.setBillboardAxis()
+
     def start(self, startPos, enemyParent):
         self.model.show()
         self.model.reparentTo(enemyParent)
@@ -31,6 +44,7 @@ class Enemy(DirectObject):
                           0)
         self.accept("into-" + "colEnemy" + str(self.id), self.hit)
         self.accept("inRange-" + "colEnemy" + str(self.id), self.startAttack)
+        self.statusHealth.update(self.health)
 
     def stop(self):
         self.model.remove_node()
@@ -42,6 +56,7 @@ class Enemy(DirectObject):
             base.messenger.send("killEnemy", [self.id])
         else:
             self.health -= _dmg
+            self.statusHealth.update(self.health)
 
     def makeAi(self):
         # Make some ai character for each

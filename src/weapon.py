@@ -1,6 +1,6 @@
 from direct.showbase.DirectObject import DirectObject
-from panda3d.core import CollisionNode, CollisionSegment, Point3
-from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent, CollisionHandlerQueue
+from panda3d.core import CollisionNode, CollisionSegment
+from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerQueue
 from direct.interval.IntervalGlobal import ProjectileInterval, LerpPosInterval
 
 class Weapon(DirectObject):
@@ -11,12 +11,25 @@ class Weapon(DirectObject):
         self.dmg = _dmg
         self.weaponType = weaponType
         self.mountSlot = _mountSlot
+
+        self.muzzleFlash = loader.loadModel("muzzleflash")
         if weaponType == "Pistol":
             self.style = "OneHand"
             self.model = loader.loadModel("Pistol")
+            self.muzzleFlash.setZ(0.65)
+            self.muzzleFlash.setX(-0.04)
+            self.muzzleFlash.setScale(0.25)
+            self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
         else:
             self.style = "TwoHand"
             self.model = loader.loadModel("MG")
+            self.muzzleFlash.setZ(0.65)
+            self.muzzleFlash.setX(0.08)
+            self.muzzleFlash.setScale(0.3)
+            self.muzzleFlash.find('**/+SequenceNode').node().setFrameRate(20)
+        self.muzzleFlash.reparentTo(self.model)
+        self.muzzleFlash.find('**/+SequenceNode').node().stop()
+        self.muzzleFlash.hide()
 
         # Load bullet model
         self.bullet = loader.loadModel("Bullet")
@@ -60,6 +73,12 @@ class Weapon(DirectObject):
     def doFire(self, _toPos=(0, 0, 0)):
         self.isFiring = True
 
+        if self.weaponType == "Pistol":
+            self.muzzleFlash.find('**/+SequenceNode').node().play(0, 1)
+        else:
+            self.muzzleFlash.find('**/+SequenceNode').node().loop(True)
+        self.muzzleFlash.show()
+
         # For some reason the mouse ray end up at posZ -1 (which causes a problem when we make the enemy spheres smaller in radius)
         # so here for now.. ill make a quick fix.
         adjustedZ = (_toPos[0], _toPos[1], 0)
@@ -67,7 +86,8 @@ class Weapon(DirectObject):
         self.shootRay.setPointA(self.main.player.model.getPos())
         self.shootRay.setPointB(adjustedZ)
 
-        self.setProjectile(self.model.getPos(), adjustedZ)#_toPos)
+        fromPos = self.main.player.model.getPos() #self.model.getPos()
+        self.setProjectile(fromPos, adjustedZ)#_toPos)
 
         self.shootTraverser.traverse(self.main.enemyParent)
         if self.shootingQH.getNumEntries() > 0:
@@ -76,20 +96,39 @@ class Weapon(DirectObject):
             base.messenger.send("into-" + enemyCol, [self.dmg])
 
     def stopFire(self):
-        pass
+        if self.weaponType == "Pistol" and \
+               self.muzzleFlash.find('**/+SequenceNode').node().isPlaying():
+            taskMgr.add(self.waitForFrame, "waitForFrame")
+            return
+        self.muzzleFlash.find('**/+SequenceNode').node().stop()
+        self.muzzleFlash.hide()
+
+    def waitForFrame(self, task):
+        print "here"
+        if self.muzzleFlash.find('**/+SequenceNode').node().isPlaying():
+            return task.cont
+        self.muzzleFlash.find('**/+SequenceNode').node().stop()
+        self.muzzleFlash.hide()
 
     def reload(self):
         pass
 
     def setProjectile(self, _from, _to):
-        self.bullet.reparentTo(self.model)
+        self.bullet.reparentTo(render)#self.model)
         # setup the projectile interval
-        self.bulletProjectile = ProjectileInterval(self.bullet,
-                                        startPos = Point3(_from),
-                                        duration = 1,
-                                        endPos = Point3(_to))
+        #self.bulletProjectile = ProjectileInterval(self.bullet,
+        #                                startPos = Point3(_from),
+        #                                duration = 1,
+        #                                endPos = Point3(_to))
         #self.bulletProjectile = self.bullet.posInterval(1.0, Point3(_to), startPos=Point3(_from))
         #self.bulletProjectile = LerpPosInterval(self.bullet, 2.0, _to, _from)
+        print "POSITIONS:"
+        print _to
+        print _from
+        frm = render.getPos(self.main.player.model)
+        print frm
+
+        self.bulletProjectile = LerpPosInterval(self.bullet, 1.0, _to, _from)
         self.bulletProjectile.start()
 
 
