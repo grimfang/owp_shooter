@@ -167,6 +167,7 @@ class Player(DirectObject):
         self.activeWeapon.model.reparentTo(self.model)
         self.activeWeapon.model.setY(self.model.getY() - 0.1)
         self.model.show()
+        self.activeWeapon.model.show()
         self.fireRate = self.activeWeapon.fireRate
 
     def unmountWeapon(self):
@@ -255,7 +256,10 @@ class Player(DirectObject):
     def changeWeapon(self, _entry):
         itemColName = _entry.getIntoNodePath().node().getName()
         base.messenger.send("into-" + itemColName)
-        self.mountSlot.append(Weapon(self.main, "MachineGun", 0.15, 50, weaponType="MG"))
+        for weapon in self.mountSlot:
+            if weapon.name == "MachineGun":
+                return
         self.unmountWeapon()
+        self.mountSlot.append(Weapon(self.main, "MachineGun", 0.15, 50, weaponType="MG"))
         self.mountWeapon(self.mountSlot[len(self.mountSlot) - 1])
 
