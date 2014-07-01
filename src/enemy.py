@@ -69,11 +69,13 @@ class Enemy(DirectObject):
 
     def startAttack(self, _inRange=False):
 
-        if not _inRange:
-            self.isAttacking = False
-            taskMgr.remove("StartAttack")
-        elif _inRange:
-            taskMgr.add(self.attack, "StartAttack")
+        if _inRange:
+            self.isAttacking = True
+            self.simpleAttack()
+            #taskMgr.remove("StartAttack")
+        #elif _inRange:
+        #    pass
+        #    taskMgr.add(self.attack, "StartAttack")
 
     def attack(self, task):
         dt = globalClock.getDt()
@@ -82,3 +84,6 @@ class Enemy(DirectObject):
             self.lastShot -= self.attackRate
             base.messenger.send("doDamageToPlayer", [self.damageDone])
         return task.again
+
+    def simpleAttack(self):
+        base.messenger.send("doDamageToPlayer", [self.damageDone])

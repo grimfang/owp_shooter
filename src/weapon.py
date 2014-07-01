@@ -87,7 +87,7 @@ class Weapon(DirectObject):
         self.shootRay.setPointB(adjustedZ)
 
         fromPos = self.main.player.model.getPos() #self.model.getPos()
-        self.setProjectile(fromPos, adjustedZ)#_toPos)
+        #self.setProjectile(fromPos, adjustedZ)#_toPos)
 
         self.shootTraverser.traverse(self.main.enemyParent)
         if self.shootingQH.getNumEntries() > 0:
