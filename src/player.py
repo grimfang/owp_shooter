@@ -1,5 +1,5 @@
 from panda3d.core import CollisionSphere, CollisionNode
-from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent
+from panda3d.core import BitMask32, CollisionTraverser, CollisionHandlerEvent, CollisionHandlerPusher
 from direct.showbase.DirectObject import DirectObject
 from hud import Hud
 from weapon import Weapon
@@ -46,17 +46,17 @@ class Player(DirectObject):
         self.playerEH.addOutPattern('outOfPlayer-%in')
         playerCNode = CollisionNode('playerSphere')
         playerCNode.setFromCollideMask(BitMask32.bit(1))
+        playerCNode.setIntoCollideMask(BitMask32.bit(1))
         self.playerSphere = CollisionSphere(0, 0, 0, 0.6)
         playerCNode.addSolid(self.playerSphere)
         self.playerNP = self.model.attachNewNode(playerCNode)
         self.playerTraverser.addCollider(self.playerNP, self.playerEH)
         #self.playerNP.show()
 
-        # Create a basic weapon
-        #self.player.mountSlot.append(Weapon(self, "MachineGun", 0.15, 50, weaponType="MG"))
-        self.mountSlot.append(Weapon(self.main, "Pistol", 0.30, 25, weaponType="Pistol"))
-        # Also mount the weapon on the player
-        self.mountWeapon(self.mountSlot[0])
+        self.playerPusher = CollisionHandlerPusher()
+        self.playerPusher.addCollider(self.playerNP, self.model)
+        self.playerPushTraverser = CollisionTraverser()
+        self.playerPushTraverser.addCollider(self.playerNP, self.playerPusher)
 
     def acceptKeys(self):
         self.accept("w", self.setKey, ["up", True])
@@ -109,13 +109,23 @@ class Player(DirectObject):
         self.model.setPos(startPos.x,
                           startPos.y,
                           0)
+        for slot in self.mountSlot[:]:
+            self.mountSlot.remove(slot)
+        # Create a basic weapon
+        self.mountSlot.append(Weapon(self.main, "Pistol", 0.30, 25, weaponType="Pistol"))
+        # Mount the players default weapon
+        self.mountWeapon(self.mountSlot[0])
+        self.playerHud.setWeapon("Pistol")
+
         self.acceptKeys()
         self.playerHud.show()
+
         taskMgr.add(self.move, "moveTask")
 
     def stop(self):
         taskMgr.remove("moveTask")
         self.ignoreKeys()
+        self.unmountWeapon()
         self.playerHud.hide()
         self.model.hide()
 
@@ -230,7 +240,7 @@ class Player(DirectObject):
             self.main.stop()
         else:
             self.health -= _dmg
-            print "Remaining Health: ", self.health
+            #print "Remaining Health: ", self.health
         base.messenger.send("setHealth", [self.health])
 
     def addHealItemEvent(self, _id):
@@ -261,5 +271,7 @@ class Player(DirectObject):
                 return
         self.unmountWeapon()
         self.mountSlot.append(Weapon(self.main, "MachineGun", 0.15, 50, weaponType="MG"))
+        self.playerHud.setWeapon("MG")
         self.mountWeapon(self.mountSlot[len(self.mountSlot) - 1])
+        self.activeWeapon.model.show()
 
