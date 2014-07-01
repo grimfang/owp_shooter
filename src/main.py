@@ -45,6 +45,7 @@ class Main(ShowBase, DirectObject):
         self.level = Level()
         self.enemyParent = render.attachNewNode("EnemyParent")
         self.enemyParent.setH(180)
+        self.enemyStrength = 0
         self.itemParent = render.attachNewNode("ItemParent")
         self.mouse = Mouse(self.level.planeNP)
         random.seed()
@@ -161,10 +162,20 @@ class Main(ShowBase, DirectObject):
 
     def world(self, task):
         """MAIN TASK"""
+        mul = int(self.player.points / 500)
+        self.maxEnemyCount + (5 * mul)
+
+        mul = int(self.player.points / 1000)
+        self.maxItemCount - (1 * mul)
+
+        mul = int(self.player.points / 1500)
+        self.enemyStrength = 1 * mul
+
         self.spawnEnemy()
         self.spawnItem()
         self.player.playerTraverser.traverse(self.enemyParent)
         self.player.playerTraverser.traverse(self.itemParent)
+        self.player.playerPushTraverser.traverse(self.level.planeNP)
         return task.cont
 
     def AIUpdate(self, task):

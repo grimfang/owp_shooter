@@ -7,6 +7,7 @@ from panda3d.ai import AICharacter
 class Enemy(DirectObject):
     def __init__(self, _main):
         self.main = _main
+        self.strenght = self.main.enemyStrength
         self.id = id(self)
         self.model = loader.loadModel("Enemy")
         self.model.setP(-90)
@@ -19,15 +20,16 @@ class Enemy(DirectObject):
         #self.colNP.show()
 
         # Game state
-        self.health = 100.0
-        self.damageDone = 0.1
+        self.health = 100 + (100 * self.strenght)
+        self.damageDone = 0.1 + (0.1 * self.strenght)
         self.lastShot = 0.0
         self.attackRate = 10.0
 
 
         self.statusHealth = DirectWaitBar(
             text = "",
-            value = 100,
+            value = self.health,
+            range = self.health,
             frameSize = (0.12, 0.8, -0.12, 0.0),
             pos = (-0.5, 0, -0.5),
             barColor = (1, 0, 0, 1))
@@ -60,7 +62,7 @@ class Enemy(DirectObject):
 
     def makeAi(self):
         # Make some ai character for each
-        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, -100, 0.05, 6)
+        self.aiChar = AICharacter("Enemy" + str(self.id), self.model, -100, 0.05 + (0.05 * self.strenght), 6 + (1 * self.strenght))
         self.main.AiWorld.addAiChar(self.aiChar)
         self.AIbehaviors = self.aiChar.getAiBehaviors()
 
