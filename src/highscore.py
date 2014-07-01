@@ -21,16 +21,16 @@ class Highscore():
 
         if not os.path.exists(self.highscorefile):
             with open(self.highscorefile, "w") as f:
-                f.write("""Foxy;39
-Wolf;30
-Coon;25
-Kitty;20
-Ferret;18
-Lynx;15
-Lion;10
-Tiger;8
-Birdy;5
-Fishy;0""")
+                f.write("""Foxy;4000
+Wolf;3500
+Coon;3000
+Kitty;2020
+Ferret;2000
+Lynx;1700
+Lion;1280
+Tiger;800
+Birdy;450
+Fishy;250""")
 
 
         with open(self.highscorefile, "r+") as f:
