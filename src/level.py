@@ -4,7 +4,7 @@ from panda3d.core import BitMask32
 class Level():
     def __init__(self):
         self.startPos = VBase2(0,0)
-        self.levelfile = "level2.egg"
+        self.levelfile = "level2"
         self.model = loader.loadModel(self.levelfile)
         self.model.setPos(0,0,-1)
         self.model.setScale(2)
