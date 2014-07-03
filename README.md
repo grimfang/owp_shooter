@@ -10,6 +10,13 @@ How to play:
 
 
 ##License:
+###Artwork:
+```
+CC BY-NC-ND 3.0
+see full license here:
+http://creativecommons.org/licenses/by-nc-nd/3.0/
+```
+###Sourcecode:
 ```
 MIT License
 
