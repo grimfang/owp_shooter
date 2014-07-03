@@ -4,15 +4,15 @@ from panda3d.core import BitMask32
 class Level():
     def __init__(self):
         self.startPos = VBase2(0,0)
-        self.levelfile = "level.egg"
+        self.levelfile = "level2.egg"
         self.model = loader.loadModel(self.levelfile)
         self.model.setPos(0,0,-1)
         self.model.setScale(2)
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, 0)))
-        planeUp = CollisionPlane(Plane(Vec3(0, 1, 0), Point3(0, -6, 0)))
-        planeDown = CollisionPlane(Plane(Vec3(0, -1, 0), Point3(0, 6, 0)))
-        planeLeft = CollisionPlane(Plane(Vec3(-1, 0, 0), Point3(5, 0, 0)))
-        planeRight = CollisionPlane(Plane(Vec3(1, 0, 0), Point3(-5, 0, 0)))
+        planeUp = CollisionPlane(Plane(Vec3(0, 1, 0), Point3(0, -7.5, 0)))
+        planeDown = CollisionPlane(Plane(Vec3(0, -1, 0), Point3(0, 7.5, 0)))
+        planeLeft = CollisionPlane(Plane(Vec3(-1, 0, 0), Point3(7.5, 0, 0)))
+        planeRight = CollisionPlane(Plane(Vec3(1, 0, 0), Point3(-7.5, 0, 0)))
         cnode = CollisionNode('cnode')
         cnode.setIntoCollideMask(BitMask32.bit(1))
         cnode.setFromCollideMask(BitMask32.bit(1))

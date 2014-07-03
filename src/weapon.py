@@ -52,7 +52,6 @@ class Weapon(DirectObject):
 
     def setupRay(self):
         self.shootTraverser = CollisionTraverser()
-        # Setup mouse ray
         self.shootingQH = CollisionHandlerQueue()
         #self.shootingEH = CollisionHandlerEvent()
         #self.shootingEH.addInPattern('into-%in')
@@ -62,12 +61,9 @@ class Weapon(DirectObject):
         shootNode.setFromCollideMask(BitMask32.bit(1))
         # create a collision segment (ray like)
         self.shootRay = CollisionSegment()
-        # add the ray as a solid to the picker node
         shootNode.addSolid(self.shootRay)
-        # create a nodepath with the camera to the picker node
         #self.pickerNP = self.main.player.model.attachNewNode(pickerNode)
         self.shootNP = render.attachNewNode(shootNode)
-        # add the nodepath to the base traverser
         #self.shootTraverser.addCollider(self.shootNP, self.shootingEH)
         self.shootTraverser.addCollider(self.shootNP, self.shootingQH)
         #self.shootNP.show()

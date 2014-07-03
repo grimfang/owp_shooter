@@ -1,0 +1,244 @@
+<CoordinateSystem> { Z-Up }
+
+<Texture> Texture.001 {
+  "tex/walls.png"
+  <Scalar> wrap { repeat }
+  <Scalar> minfilter { linear_mipmap_linear }
+  <Scalar> magfilter { linear_mipmap_linear }
+  <Scalar> envtype { modulate }
+}
+<Texture> Tex {
+  "tex/ground.png"
+  <Scalar> wrap { repeat }
+  <Scalar> minfilter { linear_mipmap_linear }
+  <Scalar> magfilter { linear_mipmap_linear }
+  <Scalar> envtype { modulate }
+}
+<Material> Material.001 {
+  <Scalar> diffr { 0.397538 }
+  <Scalar> diffg { 0.397538 }
+  <Scalar> diffb { 0.397538 }
+  <Scalar> emitr { 0 }
+  <Scalar> emitg { 0 }
+  <Scalar> emitb { 0 }
+  <Scalar> specr { 0.5 }
+  <Scalar> specg { 0.5 }
+  <Scalar> specb { 0.5 }
+  <Scalar> shininess { 12.5 }
+}
+<Group> Point {
+  <Transform> {
+    <Matrix4> {
+      1 0 0 0
+      0 1 0 0
+      0 0 1 0
+      -0.025116 0.202384 10.7375 1
+    }
+  }
+}
+<Group> Plane {
+  <Transform> {
+    <Matrix4> {
+      7.5 0 0 0
+      0 7.5 0 0
+      0 0 1 0
+      0 0 0 1
+    }
+  }
+  <VertexPool> Plane {
+    <Vertex> 0 {
+      -7.9735 -7.9735 3.02495
+      <UV> {
+        0.496928 0.65133
+        <Tangent> { -1 -1.19667e-08 5.73373e-07 }
+        <Binormal> { 5.73498e-07 -0.020866 0.999782 }
+      }
+    }
+    <Vertex> 1 {
+      -7.9735 -7.9735 3.02495
+      <UV> {
+        -0.001162 0.998052
+        <Tangent> { 1.94189e-05 1 -0.00093044 }
+        <Binormal> { -0.020866 0.000930643 0.999782 }
+      }
+    }
+    <Vertex> 2 {
+      -7.9735 7.9735 3.02495
+      <UV> {
+        -0.002949 0.994628
+        <Tangent> { 1 0 0 }
+        <Binormal> { 0 0.020866 0.999782 }
+      }
+    }
+    <Vertex> 3 {
+      -7.9735 7.9735 3.02495
+      <UV> {
+        0.502495 0.999663
+        <Tangent> { 1.94702e-05 1 -0.000932901 }
+        <Binormal> { -0.020866 0.000933104 0.999782 }
+      }
+    }
+    <Vertex> 4 {
+      -7.5 -7.5 0
+      <UV> {
+        0.499582 0.319566
+        <Tangent> { -1 0 0 }
+        <Binormal> { 0 -0.020866 0.999782 }
+      }
+    }
+    <Vertex> 5 {
+      -7.5 -7.5 0
+      <UV> {
+        -5e-05 0.668738
+        <Tangent> { 3.05482e-05 0.999999 -0.00146369 }
+        <Binormal> { -0.020866 0.00146401 0.999781 }
+      }
+    }
+    <Vertex> 6 {
+      -7.5 7.5 0
+      <UV> {
+        -0.000516 0.657297
+        <Tangent> { 1 -1.25122e-08 -5.99512e-07 }
+        <Binormal> { 5.99643e-07 0.020866 0.999782 }
+      }
+    }
+    <Vertex> 7 {
+      -7.5 7.5 0
+      <UV> {
+        0.502566 0.671122
+        <Tangent> { 3.06341e-05 0.999999 -0.00146781 }
+        <Binormal> { -0.020866 0.00146813 0.999781 }
+      }
+    }
+    <Vertex> 8 {
+      -7.4964 -7.4964 0
+      <UV> {
+        0.0001 0.0001
+        <Tangent> { 1 0 0 }
+        <Binormal> { 0 1 0 }
+      }
+    }
+    <Vertex> 9 {
+      -7.4964 7.4964 0
+      <UV> {
+        0.0001 0.9999
+        <Tangent> { 1 0 0 }
+        <Binormal> { 0 1 0 }
+      }
+    }
+    <Vertex> 10 {
+      7.4964 -7.4964 0
+      <UV> {
+        0.9999 0.0001
+        <Tangent> { 1 0 0 }
+        <Binormal> { 0 1 0 }
+      }
+    }
+    <Vertex> 11 {
+      7.4964 7.4964 0
+      <UV> {
+        0.9999 0.9999
+        <Tangent> { 1 0 0 }
+        <Binormal> { 0 1 0 }
+      }
+    }
+    <Vertex> 12 {
+      7.5 -7.5 0
+      <UV> {
+        0.493925 0.663041
+        <Tangent> { 0 -1 0 }
+        <Binormal> { 0.020866 0 0.999782 }
+      }
+    }
+    <Vertex> 13 {
+      7.5 -7.5 0
+      <UV> {
+        -0.000502 0.319566
+        <Tangent> { -1 0 0 }
+        <Binormal> { 0 -0.020866 0.999782 }
+      }
+    }
+    <Vertex> 14 {
+      7.5 7.5 0
+      <UV> {
+        -0.000665 0.663041
+        <Tangent> { 0 -1 0 }
+        <Binormal> { 0.020866 0 0.999782 }
+      }
+    }
+    <Vertex> 15 {
+      7.5 7.5 0
+      <UV> {
+        0.487954 0.657298
+        <Tangent> { 1 -1.25122e-08 -5.99514e-07 }
+        <Binormal> { 5.99644e-07 0.020866 0.999782 }
+      }
+    }
+    <Vertex> 16 {
+      7.9735 -7.9735 3.02495
+      <UV> {
+        0.495632 0.994705
+        <Tangent> { 0 -1 0 }
+        <Binormal> { 0.020866 0 0.999782 }
+      }
+    }
+    <Vertex> 17 {
+      7.9735 -7.9735 3.02495
+      <UV> {
+        -0.003668 0.651331
+        <Tangent> { -1 -1.19666e-08 5.73371e-07 }
+        <Binormal> { 5.73496e-07 -0.020866 0.999782 }
+      }
+    }
+    <Vertex> 18 {
+      7.9735 7.9735 3.02495
+      <UV> {
+        -0.002373 0.994705
+        <Tangent> { 0 -1 0 }
+        <Binormal> { 0.020866 0 0.999782 }
+      }
+    }
+    <Vertex> 19 {
+      7.9735 7.9735 3.02495
+      <UV> {
+        0.490387 0.994628
+        <Tangent> { 1 0 0 }
+        <Binormal> { 0 0.020866 0.999782 }
+      }
+    }
+  }
+  <Polygon> {
+    <Normal> { 0 0 1 }
+    <TRef> { Tex }
+    <MRef> { Material.001 }
+    <VertexRef> { 8 10 11 9 <Ref> { Plane } }
+  }
+  <Polygon> {
+    <Normal> { 0.999782 0 0.020866 }
+    <TRef> { Tex }
+    <TRef> { Texture.001 }
+    <MRef> { Material.001 }
+    <VertexRef> { 7 3 1 5 <Ref> { Plane } }
+  }
+  <Polygon> {
+    <Normal> { 0 0.999782 0.020866 }
+    <TRef> { Tex }
+    <TRef> { Texture.001 }
+    <MRef> { Material.001 }
+    <VertexRef> { 4 0 17 13 <Ref> { Plane } }
+  }
+  <Polygon> {
+    <Normal> { 0 -0.999782 0.020866 }
+    <TRef> { Tex }
+    <TRef> { Texture.001 }
+    <MRef> { Material.001 }
+    <VertexRef> { 15 19 2 6 <Ref> { Plane } }
+  }
+  <Polygon> {
+    <Normal> { -0.999782 0 0.020866 }
+    <TRef> { Tex }
+    <TRef> { Texture.001 }
+    <MRef> { Material.001 }
+    <VertexRef> { 12 16 18 14 <Ref> { Plane } }
+  }
+}

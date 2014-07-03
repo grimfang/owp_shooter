@@ -32,6 +32,10 @@ class Main(ShowBase, DirectObject):
         ShowBase.__init__(self)
 
         # Set the frame rate lock
+        # We need to set globalClock rate to 30' because it looks
+        # like the AI is affected by the frame rate.
+        # the higher the rate the faster they move depending on
+        # your pc.
         globalClock.setMode(ClockObject.MLimited)
         globalClock.setFrameRate(30)
 
@@ -69,6 +73,7 @@ class Main(ShowBase, DirectObject):
         self.accept("pickedUpHealth", self.removeItem)
         self.accept("pickedUpWeapon", self.removeItem)
 
+    # Start everything needed to play the game
     def start(self):
         self.gameStarted = True
         self.level.start()
@@ -78,7 +83,7 @@ class Main(ShowBase, DirectObject):
         self.AiWorld = AIWorld(render)
         self.taskMgr.add(self.AIUpdate, "UPDATEAI")
 
-
+    # When the game stops, we do some cleanups
     def stop(self):
         self.level.stop()
         self.highscore.setPoints(self.player.name, self.player.points)
