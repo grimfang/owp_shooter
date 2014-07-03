@@ -4,13 +4,13 @@ owp_shooter
 (a simple shooter one week project)
 
 How to play:
-WASD - Keyboard keys control the player movement.
-Mouse - Look/Aim.
-Mouse btn1 - Fire single shot or Hold to auto fire. 
+- WASD - Keyboard keys control the player movement.
+- Mouse - Look/Aim.
+- Mouse btn1 - Fire single shot or Hold to auto fire. 
 
 
-License:
-
+##License:
+'''
 MIT License
 
 Copyright (c) 2014, Grimfang Developers
@@ -32,3 +32,4 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+'''
